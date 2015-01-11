@@ -1,0 +1,8 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.editor': [
+    {
+      'label': 'Preview-Plus'
+      'command': 'preview-plus:preview'
+    }
+  ]

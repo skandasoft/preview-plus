@@ -1,0 +1,41 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/stylesheets/ui-variables.less
+// for a full listing of what's available.
+@import "ui-variables";
+
+.preview-plus-panel{
+  // max-height: 200px;
+}
+.resizer-drag {
+  height:2px;
+  top:0;
+  left: 0;
+}
+.resizer-drag:hover{
+  cursor: ns-resize;
+  height:6px;
+  background-color:cornsilk;
+}
+
+div > iframe {
+  height: 100%;
+}
+
+.preview-plus-status .live.on{
+  color: green;
+}
+
+.preview-plus-status .live{
+  color: red;
+}
+.preview-plus-status span{
+  padding: 0 10px;
+}
+
+.preview-plus-status span.enums{
+  padding: 0 3px;
+  content: "▼";
+  color: green;
+  display: none;
+}
