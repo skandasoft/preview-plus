@@ -1,7 +1,7 @@
 {
   "name": "preview-plus",
   "main": "./lib/preview-plus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Preview Plus # Preview Any thing",
   "repository": "https://github.com/skandasoft/preview-plus",
   "license": "MIT",
