@@ -16,8 +16,12 @@ module.exports =
 
   toggleHTML: ->
       atom.config.set 'preview-plus.htmlp', !atom.config.get 'preview-plus.htmlp'
-      if ed = atom.workspace.getActiveEditor()
-        ed.set 'preview-plus.htmlp', !ed.get 'preview-plus.htmlp'
+      if editor = atom.workspace.getActiveEditor()
+        key = @getGrammar editor
+        if atom.config.get('preview-plus.htmlp')
+          @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key].enums
+        else
+          @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
 
   showConfig: ->
     fileName = "#{@srcdir}/config.coffee"
@@ -52,7 +56,9 @@ module.exports =
         @liveEditors = []
       editors = atom.workspace.getEditors()
       for editor in editors
-        editor.set('preview-plus.livePreview',obj.newValue) if editor.get('preview-plus.livePreview')?
+        if editor.get('preview-plus.livePreview')?
+          editor.set('preview-plus.livePreview',obj.newValue)
+          @previewStatus.live.toggleClass 'on'
 
     atom.commands.add 'atom-workspace', 'preview-plus:preview': => @toggle()
     atom.commands.add 'atom-workspace', 'preview-plus:toggleLive': => @toggleLive()
@@ -89,8 +95,10 @@ module.exports =
 
       @key = @getGrammar editor
 
-
-      @toKey = @getCompileTo editor,@key
+      if editor.get('preview-plus.htmlp')
+        @toKey = 'htmlp'
+      else
+        @toKey = @getCompileTo editor,@key
       to = @config[@key][@toKey]
       console.log @key
       lang = require "./lang/#{@key}"
@@ -114,7 +122,7 @@ module.exports =
           e = new Error()
           e.name = 'console'
           e.message = text
-          @error(e)
+          throw e
     #
     catch e
       console.log e.message

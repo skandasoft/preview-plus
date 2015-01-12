@@ -41,14 +41,19 @@ class StatusView extends View
         @model.toggle()
       ,300
     else
-      if @editor.get('preview-plus.htmlp')
+      if @editor.get('preview-plus.htmlp')?
         clearTimeout timer
         @updateCompileTo('htmlp')
         @clicks = 0
 
   updateCompileTo: (compileTo)->
+    if compileTo is 'htmlp'
+      @editor.set('preview-plus.htmlp',true)
+    else
+      @editor.set('preview-plus.htmlp',false) if @editor.get('preview-plus.htmlp')?
     @editor.set('preview-plus.compileTo',compileTo)
     @compileTo.text compileTo
+    @compileTo.toggleClass 'htmlp', compileTo is 'htmlp'
     @model.toggle()
 
   show: ->
@@ -82,9 +87,14 @@ class StatusView extends View
         if @model.config[key][toKey].cursorFocusBack
           @editor.set('preview-plus.cursorFocusBack',@model.config[key][toKey].cursorFocusBack)
         @editor.set('preview-plus.enums',true) if @model.config[key].enums?.length > 1
-        @editor.set('preview-plus.htmlp',true) if 'htmlp' in @model.config[key].enums
+        # if @editor.set('preview-plus.htmlp',htmlp) and 'htmlp' in @model.config[key].enums
+        if (not @editor.get('preview-plus.htmlp')? ) and 'htmlp' in @model.config[key].enums
+        #   @updateCompileTo('htmlp') if htmlp = atom.config.get('preview-plus.htmlp') and not @editor.get('preview-plus.htmlp')?
+          @editor.set 'preview-plus.htmlp',atom.config.get('preview-plus.htmlp')
 
-      @compileTo.text @editor.get('preview-plus.compileTo')
+
+      @compileTo.text if @editor.get('preview-plus.htmlp') then 'htmlp' else @editor.get('preview-plus.compileTo')
+      @compileTo.toggleClass 'htmlp',atom.config.get('preview-plus.htmlp') and @compileTo.text() is 'htmlp'
       @enums.show() if @editor.get('preview-plus.enums')
       @setLive()
     catch e

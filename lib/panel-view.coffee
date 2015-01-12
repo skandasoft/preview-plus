@@ -1,4 +1,5 @@
 {$, $$,$$$, ScrollView,TextEditor}  = require 'atom'
+
 module.exports =
 class PanelView extends ScrollView
   constructor: (@title,@src,@grammar)->

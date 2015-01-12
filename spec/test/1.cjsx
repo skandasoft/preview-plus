@@ -10,4 +10,4 @@ NeatComponent = React.createClass
       </ul>
 
     </div>
-React.render <NeatComponent showTitle=true n=8 />, document.body
+React.render <NeatComponent showTitle=true n=5 />, document.body
