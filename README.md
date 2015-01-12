@@ -53,7 +53,7 @@ Double on any format to display as HTMLPreview
 preview Typescript to JS
 
 Here is some video link to the demo
-[![part1](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/iuqcmPsf4uo)
+[![part1](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/k-IhPp5csNQ)
 [![part2](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/WxUR6Sxpi5k)
 [![part3](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/iuqcmPsf4uo)
 [![part4](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/7e7ueiiW60g)
