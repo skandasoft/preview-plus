@@ -20,8 +20,9 @@ module.exports =
               @destroy()
               @subscription.dispose()
         unless @replaceText('base',text,false)
-          unless text = @replaceText('head',text)
-            text = @replaceText('html',text)
+          debugger
+          unless text = @replaceText('head',text) or text
+            text ?= @replaceText('html',text)
         webview.attr disablewebsecurity:true
         webview.attr src: "data:text/html,#{text}"
       else
