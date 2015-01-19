@@ -53,7 +53,7 @@ Double click on any format to display as HTMLPreview
 preview Typescript to JS  
 
 Here is some video link to the demo  
-![preview-plus](http://www.youtube.com/playlist?list=PLWe88FcgV1ft0TKra0gQBptfFc7jjEspC)
+-[![Preview-Plus](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](http://www.youtube.com/playlist?list=PLWe88FcgV1ft0TKra0gQBptfFc7jjEspC)
 
 
 
