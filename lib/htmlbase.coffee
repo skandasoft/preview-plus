@@ -39,11 +39,15 @@ class HTMLBase extends View
     @close()
 
   onConfirm: ->
-    project = atom.project.get('preview-plus.cproject')
-    project.htmlu = @find('#htmlu').prop('checked')
-    project.url = @find('#url').val()
-    project.base = @find('#href').val()
-    atom.project.set('preview-plus.cproject',project)
+    cproject = atom.project.get('preview-plus.cproject')
+    cproject.htmlu = @find('#htmlu').prop('checked')
+    cproject.url = @find('#url').val()
+    cproject.base = @find('#href').val()
+    atom.project.set('preview-plus.cproject',cproject)
+    project = atom.project.get('preview-plus.project')
+    for key,val of cproject
+      project[key] = val
+    atom.project.set('preview-plus.project',project)
     @model.previewStatus?.setCompilesTo atom.workspace.getActivePaneItem()
     @model.toggle()
     @close()

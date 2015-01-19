@@ -32,8 +32,7 @@ module.exports =
     atom.workspace.open fileName, searchAllPanes:true
 
   activate: (state) ->
-
-    project = atom.project.get('preview-plus.project') or {}
+    project = state.projectState or {}
     cproject = project[atom.project.path] ?= {}
     cproject.base ?= atom.project.path
     cproject.url ?= 'http://localhost'
@@ -176,35 +175,35 @@ module.exports =
     title = "preview~#{editor.getTitle()}.#{ext}"
     grammar = if to and not err then to.ext  else syntax = editor.getGrammar()
     syntax ?= atom.syntax.selectGrammar(grammar)
-    if not err and editor.getSelectedText() and (@toKey isnt 'htmlp' or @toKey isnt 'htmlu')
+    if not err and editor.getSelectedText() and (@toKey isnt 'htmlp' and @toKey isnt 'htmlu')
       if @panelItem
         @panelItem.showPanel(text,syntax)
       else
         @panelItem = new PanelView(title,text,syntax)
         atom.workspace.addBottomPanel item: @panelItem
     else
-      view = atom.workspace.open title,
+      atom.workspace.open title,
                         searchAllPanes:true
                         split: split
-              .then (view)=>
+              .then (@view)=>
                     if @toKey is 'htmlu'
-                      view.setTextorUrl url:@getUrl editor
+                      @view.setTextorUrl url:@getUrl editor
                     else
-                      view.setText(text)
+                      @view.setText(text)
                     if ext is 'htmlp'
                       console.log text
                     else
-                      view.setGrammar syntax
-                      view.moveCursorToTop()
+                      @view.setGrammar syntax
+                      @view.moveCursorToTop()
                     compiledPane = atom.workspace.getActivePane()
-                    uri = view.getUri()
+                    uri = @view.getUri()
                     if path.extname(title) is '.err'
                       uri = uri.replace '.err',''
                       errView = compiledPane.itemForUri uri
                     else
                       errView = compiledPane.itemForUri "#{uri}.err"
                     errView.destroy() if errView
-                    activePane.activate() if view.get('preview-plus.cursorFocusBack') or atom.config.get('preview-plus.cursorFocusBack')
+                    activePane.activate() if @view.get('preview-plus.cursorFocusBack') or atom.config.get('preview-plus.cursorFocusBack')
   getUrl: (editor)->
       #get text under cursor
       text = editor.lineForScreenRow(editor.getCursor().getScreenRow()).text
@@ -217,10 +216,13 @@ module.exports =
       match[1].trim() if match?
 
   deactivate: ->
+    @view.destroy()
     @previewStatus.destroy()
 
   serialize: ->
-    viewState: @previewStatus.serialize()
+    previewState: @previewStatus.serialize()
+    viewState : @view.serialize()
+    projectState: atom.project.get('preview-plus.project')
 
   listen: ->
       view = atom.workspaceView.getActiveView()
