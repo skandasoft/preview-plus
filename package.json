@@ -33,9 +33,7 @@
   },
   "bundledDependencies": [
     "loophole",
-    "js2coffee",
-    "html2jsx",
-    "html-md"
+    "js2coffee"
   ],
   "dependencies": {
     "coffee-react-transform": "~2.2.1",
@@ -53,6 +51,8 @@
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
     "stylus": "~0.49.3",
-    "typescript-compiler": "~1.3.0-1"
+    "typescript-compiler": "~1.3.0-1",
+    "theorist":"~1.0.2",
+    "react-tools": "0.12.2"
   }
 }

@@ -1,5 +1,5 @@
 # preview-plus package Preview Anything to Anything
--------------------------------------------------------
+----------------------------------------------------
 
 One Utility to handle the following matrix of previews
 * coffeescript: ['JavaScript','HTML','htmlp']
@@ -22,7 +22,8 @@ One Utility to handle the following matrix of previews
 
 Install
 -----------
-apm install preview-plus
+apm install preview-plus  
+for issues with installation please update the github for resolution.
 
 Features
 -----------
@@ -38,29 +39,36 @@ Features
 * All preview can have Local setting / Config~global settings..
 * Support for SLIM/SASS/SCSS. These are possible only after the gem is installed in the system.
 
-Check if it is working by going to the test folder(preview-plus/spec/test/) and try previewing each of it.
+Check if it is working by going to the test folder(preview-plus/spec/test/) and try previewing each of it.  
+Here is some [blog](https://wordpress.com/post/79437156/23)  
+
+Go to the config settings in the preview-plus to change default (Live Switched on)  
+
+You change the default previpreew for each format from the config file.  
+Open the file using the command Preview-Plus:Config  
+Add fileTypes to identify to a particular grammar  
+All the available preview for each format is maintained in the config setting  
+Double click on any format to display as HTMLPreview  
+
+preview Typescript to JS  
+
+Here is some video link to the demo  
+![preview-plus](http://www.youtube.com/playlist?list=PLWe88FcgV1ft0TKra0gQBptfFc7jjEspC)
 
 
-Go to the config settings in the preview-plus to change default (Live Switched on)
-You change the default preview for each format from the config file.
-Open the file using the command Preview-Plus:Config
-Add fileTypes to identify to a particular grammar
-All the available preview for each format is maintained in the config setting
-
-
-Double on any format to display as HTMLPreview
-
-preview Typescript to JS
-
-Here is some video link to the demo
-[![part1](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/k-IhPp5csNQ)
-[![part2](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/WxUR6Sxpi5k)
-[![part3](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/iuqcmPsf4uo)
-[![part4](https://raw.github.com/skandasoft/preview-plus/master/Youtube_Video.png)](//youtu.be/7e7ueiiW60g)
 
 Issues
 -----------
-Currently It supports windows because some of the node modules are precompiled and bundled. This could be avoided by using dependencies. But since they need vc++ compilations It fails during installation in the apm install.
+When the Compiler put up the preview in the split screen and the editor is closed with the preview tab still on Then there is a errror when reopening.  
+I will raise it up in the discussion forum.  
+The webview right now has issues in chrome. So for now there is option for iframes but they cannot execue javascript. So The webview closes as soon as it loses focus.
+So 2 html previews cannot be open at one time. This will resolved once the chrome bug is resolved.
+I have tested using windows. You are welcome put the test result /raise issues for other os. The Slim compiler which is installed as gems generate a batch file. So I have
+the command as slim.bat for running as spawn.  
+There is a wierd error (backspace/delete key would not work while update base href for html preview in the modal panel)
+if it is any other os I have it as just the command.  
+You are welcome to contribute by adding new precompile options/submit issues to the github repo.
+
 
 TODO
 -----

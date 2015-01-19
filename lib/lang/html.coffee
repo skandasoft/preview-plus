@@ -1,10 +1,10 @@
-md = require 'html-md'
+# md = require 'html-md'
 html2jade = require 'html2jade'
 spawn = require('child_process').spawn
 tmp = require 'tmp'
 fs = require 'fs'
 path = require 'path'
-HTMLtoJSX = require 'htmltojsx'
+# HTMLtoJSX = require 'htmltojsx'
 Stream = require 'stream'
 jQuery = require 'jquery'
 command = require './command'
@@ -45,16 +45,16 @@ module.exports =
       #     dfd.resolve jade
       # dfd.promise()
 
-    md: (text)->
-      md text
+    # md: (text)->
+    #   md text
 
     htmlp: (text)->
       text
-
-    jsx: (text,options={})->
-        window.IN_BROWSER = true
-        converter = new HTMLtoJSX options
-        converter.convert text
+      
+    # jsx: (text,options={})->
+    #     window.IN_BROWSER = true
+    #     converter = new HTMLtoJSX options
+    #     converter.convert text
 
     haml: (text,options=['-s'])->
       command.compile(text,'html2haml',options)

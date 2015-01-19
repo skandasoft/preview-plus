@@ -7,11 +7,19 @@ module.exports =
     constructor: (@uri)->
 
     setText: (text)->
+      @setTextorUrl text:text
+
+    setUrl: (filePath)->
+      url = "#{atom.project.get('preview-plus.cproject').url}/#{path.filename filePath}"
+      setTextorUrl(url)
+
+    setTextorUrl: (obj)->
       view = atom.views.getView(@)
       webview = $(view.children[0])
       webview.css
         height :'100%'
         'background-color': '#fff'
+
       if atom.config.get('preview-plus.webview')
         unless @subscription
           @pane = atom.workspace.getActivePane()
@@ -19,26 +27,34 @@ module.exports =
             if item isnt @
               @destroy()
               @subscription.dispose()
-        unless @replaceText('base',text,false)
-          debugger
-          unless text = @replaceText('head',text) or text
-            text ?= @replaceText('html',text)
         webview.attr disablewebsecurity:true
-        webview.attr src: "data:text/html,#{text}"
+        if obj.url
+          webview.attr src:obj.url
+        else
+          unless @replaceText('base',obj,false)
+            unless @replaceText('head',obj)
+              unless @replaceText('html',obj)
+                base = "#{atom.project.get('preview-plus.cproject').base}/"
+                baseTag = "<base href='#{base}'></base>"
+                obj.text = "#{baseTag} #{obj.text}"
+          webview.attr src: "data:text/html,#{obj.text}"
       else
-        webview.attr srcdoc: text
+        if obj.url
+          webview.attr src:obj.url
+        else
+          webview.attr srcdoc: obj.text
 
-    replaceText: (tag,text,replace=true)->
+    replaceText: (tag,obj,replace=true)->
+            text = obj.text
             regex = new RegExp("<#{tag}>([\\s\\S]*?)</#{tag}>")
             match = text.match(regex)
             if match? and match[1].trim()
                 return true unless replace
-                base = "#{atom.project.path}/"
-                base = if @uri?.indexOf('public') then "#{base}public/"
+                base = "#{atom.project.get('preview-plus.cproject').base}/"
                 baseTag = "<base href='#{base}'></base>"
                 baseTag = "<head>#{baseTag}</head>" if tag is 'html'
                 content = "<#{tag}>#{baseTag} #{match[1]}</#{tag}>"
-                text.replace regex,content
+                obj.text = text.replace regex,content
 
     getViewClass: ->
       require './htmlview'

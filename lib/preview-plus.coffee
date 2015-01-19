@@ -13,24 +13,37 @@ module.exports =
 
   toggleLive: ->
     atom.config.set 'preview-plus.livePreview', !atom.config.get 'preview-plus.livePreview'
+    @previewStatus.live.toggleClass 'on'
 
   toggleHTML: ->
       atom.config.set 'preview-plus.htmlp', !atom.config.get 'preview-plus.htmlp'
       if editor = atom.workspace.getActiveEditor()
         key = @getGrammar editor
         if atom.config.get('preview-plus.htmlp')
+          if 'htmlu' in @config[key].enums and atom.project.get('preview-plus.cproject').htmlu
+            return @previewStatus.updateCompileTo('htmlu')
           @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key].enums
         else
           @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
 
   showConfig: ->
-    fileName = "#{@srcdir}/config.coffee"
+    srcdir = atom.project.get('preview-plus.srcdir')
+    fileName = "#{srcdir}/config.coffee"
     atom.workspace.open fileName, searchAllPanes:true
 
   activate: (state) ->
-    atom.workspace['preview-plus'] = @srcdir = __dirname
+
+    project = atom.project.get('preview-plus.project') or {}
+    cproject = project[atom.project.path] ?= {}
+    cproject.base ?= atom.project.path
+    cproject.url ?= 'http://localhost'
+    atom.project.set 'preview-plus.project',project
+    atom.project.set 'preview-plus.cproject',cproject
+    atom.project.set 'preview-plus.srcdir', __dirname
+
     atom.packages.onDidActivateAll =>
       {statusBar} = atom.workspaceView
+
       if statusBar?
           PreviewStatusView = require './status-view'
           @previewStatus = new PreviewStatusView(@)
@@ -46,7 +59,7 @@ module.exports =
       subscribe?.dispose?()
       subscribe = activePane.onDidChangeGrammar?  ->
         activePane.set('preview-plus.compileTo')
-        _this.previewStatus.setCompilesTo activePane
+        _this.previewStatus?.setCompilesTo activePane
 
     atom.config.onDidChange 'preview-plus.livePreview', (obj)=>
       if obj.newValue
@@ -58,8 +71,14 @@ module.exports =
       for editor in editors
         if editor.get('preview-plus.livePreview')?
           editor.set('preview-plus.livePreview',obj.newValue)
-          @previewStatus.live.toggleClass 'on'
+      if atom.workspace.getActiveEditor()
+        if obj.newValue
+          @previewStatus.live.removeClass 'off'
+          @toggle()
+        else
+          @previewStatus.live.addClass 'off'
 
+    atom.commands.add 'atom-workspace', 'preview-plus:base': => @base()
     atom.commands.add 'atom-workspace', 'preview-plus:preview': => @toggle()
     atom.commands.add 'atom-workspace', 'preview-plus:toggleLive': => @toggleLive()
     atom.commands.add 'atom-workspace', 'preview-plus:toggleHTML': => @toggleHTML()
@@ -79,6 +98,12 @@ module.exports =
 
     atom.contextMenu.itemSets = itemSets
 
+  base: ->
+    HTMLBaseView = require './htmlbase'
+    htmlBaseView = new HTMLBaseView @
+    atom.workspace.addModalPanel item: htmlBaseView
+    htmlBaseView.base.focus()
+
   toggle: ->
 
     try
@@ -95,12 +120,10 @@ module.exports =
 
       @key = @getGrammar editor
 
-      if editor.get('preview-plus.htmlp')
-        @toKey = 'htmlp'
-      else
-        @toKey = @getCompileTo editor,@key
+      @toKey = @getCompileTo editor,@key
+      if @toKey is 'htmlu'
+          return @preview(editor)
       to = @config[@key][@toKey]
-      console.log @key
       lang = require "./lang/#{@key}"
       data = @getContent('data',text)
       options = @getContent('options',text)
@@ -118,7 +141,7 @@ module.exports =
         dfd = compiled
         dfd.done (text)=>
           @preview(editor,text) if @compiled = text
-        dfd.fail (text)=>
+        dfd.fail (text)->
           e = new Error()
           e.name = 'console'
           e.message = text
@@ -147,12 +170,13 @@ module.exports =
     activePane = atom.workspace.paneForItem(editor)
     split = @getPosition activePane
     to = @config[@key]?[@toKey]
-    alert 'Cannot Preview' unless to
+    return atom.confirm 'Cannot Preview' unless to
     ext = if err then "#{to.ext}.err" else to.ext
+    # title = "preview-plus:#{path.dirname(editor.getPath())}/preview~#{editor.getTitle()}.#{ext}"
     title = "preview~#{editor.getTitle()}.#{ext}"
     grammar = if to and not err then to.ext  else syntax = editor.getGrammar()
     syntax ?= atom.syntax.selectGrammar(grammar)
-    if not err and editor.getSelectedText() and @toKey isnt 'htmlp'
+    if not err and editor.getSelectedText() and (@toKey isnt 'htmlp' or @toKey isnt 'htmlu')
       if @panelItem
         @panelItem.showPanel(text,syntax)
       else
@@ -162,8 +186,11 @@ module.exports =
       view = atom.workspace.open title,
                         searchAllPanes:true
                         split: split
-              .then (view)->
-                    view.setText(text)
+              .then (view)=>
+                    if @toKey is 'htmlu'
+                      view.setTextorUrl url:@getUrl editor
+                    else
+                      view.setText(text)
                     if ext is 'htmlp'
                       console.log text
                     else
@@ -178,11 +205,22 @@ module.exports =
                       errView = compiledPane.itemForUri "#{uri}.err"
                     errView.destroy() if errView
                     activePane.activate() if view.get('preview-plus.cursorFocusBack') or atom.config.get('preview-plus.cursorFocusBack')
+  getUrl: (editor)->
+      #get text under cursor
+      text = editor.lineForScreenRow(editor.getCursor().getScreenRow()).text
+      url = @getTextTag('pp-url',text) or @getTextTag('pp-url',editor.getText()) or path.basename editor.getPath()
+      "#{atom.project.get('preview-plus.cproject').url}/#{url}"
+
+  getTextTag: (tag,text)->
+      regex = new RegExp("<#{tag}>([\\s\\S]*?)</#{tag}>")
+      match = text.match(regex)
+      match[1].trim() if match?
+
   deactivate: ->
-    @view.destroy()
+    @previewStatus.destroy()
 
   serialize: ->
-    viewState: @view.serialize()
+    viewState: @previewStatus.serialize()
 
   listen: ->
       view = atom.workspaceView.getActiveView()

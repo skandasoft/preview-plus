@@ -1,7 +1,7 @@
 spawn = require('child_process').spawn
 Stream = require 'stream'
 jQuery = require 'jquery'
-_ = require 'underscore'
+_ = require 'lodash'
 tmp = require 'tmp'
 fs = require 'fs'
 path = require 'path'

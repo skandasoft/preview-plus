@@ -21,18 +21,44 @@
 div > iframe {
   height: 100%;
 }
+.preview-plus-base{
+  font-size:15px;
+}
+.preview-plus-base div {
+  margin: 5px 10px;
+  text-align: center;
+}
 
-.preview-plus-status .live.on{
-  color: green;
+.preview-plus-base input[type='text']{
+  margin-left: 10px;
+  width: 40ch;
+}
+
+.preview-plus-status span{
+  font-weight: bold;
+}
+
+.preview-plus-status .compileTo{
+  color: blueviolet;
 }
 
 .preview-plus-status .live{
+  color: green;
+  margin-right: 5px;
+}
+
+.preview-plus-status .live.on{
+  background-color: lightgreen;
+}
+
+.preview-plus-status .live.off{
   color: red;
 }
 
 .preview-plus-status .htmlp{
-  color: green;
+  background-color: lightgreen;
 }
+
 .preview-plus-status span{
   padding: 0 10px;
 }
