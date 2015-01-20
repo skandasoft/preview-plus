@@ -4,7 +4,7 @@ module.exports = (js=true,src)->
   html: (text,options={},data={})->
     text = @js(text,options) if js
     SCRIPT = CSS = ''
-    srcdir = atom.config.get('srcdir')
+    srcdir = atom.project.get('preview-plus.srcdir')
     if src
       if scripts = config[src].scripts
         for script in scripts

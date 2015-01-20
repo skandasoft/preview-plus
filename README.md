@@ -40,7 +40,7 @@ Features
 * Support for SLIM/SASS/SCSS. These are possible only after the gem is installed in the system.
 
 Check if it is working by going to the test folder(preview-plus/spec/test/) and try previewing each of it.  
-Here is some [blog](https://wordpress.com/post/79437156/23)  
+Here is some [blog](https://skandasoft.wordpress.com/2015/01/19/atom-io-preview-plus-getting-started/)  
 
 Go to the config settings in the preview-plus to change default (Live Switched on)  
 
