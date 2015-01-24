@@ -40,11 +40,11 @@ Features
 * Support for SLIM/SASS/SCSS. These are possible only after the gem is installed in the system.
 
 Check if it is working by going to the test folder(preview-plus/spec/test/) and try previewing each of it.  
-Here is some [blog](https://skandasoft.wordpress.com/2015/01/19/atom-io-preview-plus-getting-started/)  
+[Here is quick getting started](https://skandasoft.wordpress.com/2015/01/19/atom-io-preview-plus-getting-started/)  
 
 Go to the config settings in the preview-plus to change default (Live Switched on)  
 
-You change the default previpreew for each format from the config file.  
+You change the default preview for each format from the config file.  
 Open the file using the command Preview-Plus:Config  
 Add fileTypes to identify to a particular grammar  
 All the available preview for each format is maintained in the config setting  
@@ -65,7 +65,7 @@ The webview right now has issues in chrome. So for now there is option for ifram
 So 2 html previews cannot be open at one time. This will resolved once the chrome bug is resolved.
 I have tested using windows. You are welcome put the test result /raise issues for other os. The Slim compiler which is installed as gems generate a batch file. So I have
 the command as slim.bat for running as spawn.  
-There is a wierd error (backspace/delete key would not work while update base href for html preview in the modal panel)
+There is a weird error (backspace/delete key would not work while update base href for html preview in the modal panel)
 if it is any other os I have it as just the command.  
 You are welcome to contribute by adding new precompile options/submit issues to the github repo.
 

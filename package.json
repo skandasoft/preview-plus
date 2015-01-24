@@ -26,7 +26,19 @@
     "erb",
     "markdown",
     "markdown preview",
-    "typescript"
+    "typescript",
+    "js",
+    "javascript",
+    "coffeescript",
+    "coffee",
+    "coffee to js",
+    "js to coffee",
+    "marked",
+    "live preview",
+    "quick preview",
+    "Ruby Slim",
+    "css",
+    "scss2css"
   ],
   "engines": {
     "atom": ">0.150.0"
