@@ -32,7 +32,7 @@ module.exports =
     atom.workspace.open fileName, searchAllPanes:true
 
   updateProject: ->
-    project = @state.projectState or {}
+    project = @state?.projectState or {}
     cproject = project[atom.project.path] ?= {}
     cproject.base ?= atom.project.path
     cproject.url ?= 'http://localhost'
