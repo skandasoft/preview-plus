@@ -8,10 +8,10 @@ class HTMLBase extends View
     @div class:'preview-plus-base', =>
       @div class:'base',outlet:'base', =>
         @span "HTML Base"
-        @input type:'text',id:'href',value:"#{project.base}"
+        @input class:'native-key-bindings',type:'text',id:'href',value:"#{project.base}"
       @div class:'url',outlet:'url', =>
         @span "HTML URL"
-        @input type:'text',id:'url',value:"#{project.url}"
+        @input class:'native-key-bindings', type:'text',id:'url',value:"#{project.url}"
       @div =>
         @span "Use Default - URL/Local Server For HTML Preview  "
         if project.htmlu
@@ -29,14 +29,15 @@ class HTMLBase extends View
     atom.commands.add @element,
       'core:confirm': => @onConfirm()
       'core:cancel': => @cancel()
-    @element.onBlur =  => @close()
+    @element.onblur =  => @close
 
   close: ->
     atom.workspace.getActivePane().activate()
-    @remove()
+    @parent().hide()
 
   cancel: ->
     @close()
+
 
   onConfirm: ->
     cproject = atom.project.get('preview-plus.cproject')

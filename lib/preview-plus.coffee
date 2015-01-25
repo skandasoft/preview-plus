@@ -31,14 +31,18 @@ module.exports =
     fileName = "#{srcdir}/config.coffee"
     atom.workspace.open fileName, searchAllPanes:true
 
-  activate: (state) ->
-    project = state.projectState or {}
+  updateProject: ->
+    project = @state.projectState or {}
     cproject = project[atom.project.path] ?= {}
     cproject.base ?= atom.project.path
     cproject.url ?= 'http://localhost'
     atom.project.set 'preview-plus.project',project
     atom.project.set 'preview-plus.cproject',cproject
     atom.project.set 'preview-plus.srcdir', __dirname
+
+  activate: (@state) ->
+    @updateProject() if atom.project.path
+    atom.project.on 'path-changed', @updateProject
 
     atom.packages.onDidActivateAll =>
       {statusBar} = atom.workspaceView
@@ -83,7 +87,8 @@ module.exports =
     atom.commands.add 'atom-workspace', 'preview-plus:toggleHTML': => @toggleHTML()
     atom.commands.add 'atom-workspace', 'preview-plus:config': => @showConfig()
 
-    @liveEditors = []
+    @liveEditors = @views = []
+
     @subscriptions = new CompositeDisposable()
     idx = null
     itemSets = atom.contextMenu.itemSets
@@ -98,10 +103,13 @@ module.exports =
     atom.contextMenu.itemSets = itemSets
 
   base: ->
-    HTMLBaseView = require './htmlbase'
-    htmlBaseView = new HTMLBaseView @
-    atom.workspace.addModalPanel item: htmlBaseView
-    htmlBaseView.base.focus()
+    if @htmlBaseView
+      @htmlBaseView.parent().show()
+    else
+      HTMLBaseView = require './htmlbase'
+      @htmlBaseView = new HTMLBaseView @
+      atom.workspace.addModalPanel item: @htmlBaseView
+      @htmlBaseView.base.focus()
 
   toggle: ->
 
@@ -186,6 +194,7 @@ module.exports =
                         searchAllPanes:true
                         split: split
               .then (@view)=>
+                    @views.push @view
                     if @toKey is 'htmlu'
                       @view.setTextorUrl url:@getUrl editor
                     else
@@ -216,12 +225,14 @@ module.exports =
       match[1].trim() if match?
 
   deactivate: ->
-    @view.destroy()
     @previewStatus.destroy()
 
   serialize: ->
+    viewState = []
+    for view in views
+      viewState.push view.serialize()
     previewState: @previewStatus.serialize()
-    viewState : @view.serialize()
+    viewState : viewState
     projectState: atom.project.get('preview-plus.project')
 
   listen: ->

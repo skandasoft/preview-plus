@@ -2,7 +2,7 @@
 ----------------------------------------------------
 
 One Utility to handle the following matrix of previews
-* coffeescript: ['JavaScript','HTML','htmlp']
+* Coffeescript: ['JavaScript','HTML','htmlp']
 * javascript: ['CoffeeScript','HTML','htmlp']
 * jade: ['HTML','htmlp']
 * slim: ['HTML','htmlp','erb']
@@ -59,14 +59,15 @@ Here is some video link to the demo
 
 Issues
 -----------
-When the Compiler put up the preview in the split screen and the editor is closed with the preview tab still on Then there is a errror when reopening.  
-I will raise it up in the discussion forum.  
-The webview right now has issues in chrome. So for now there is option for iframes but they cannot execue javascript. So The webview closes as soon as it loses focus.
+~~When the Compiler put up the preview in the split screen and the editor is closed with the preview tab still on Then there is a errror when reopening.  
+I will raise it up in the discussion forum.~~
+click on save when it asks for save/cancel..this bring it up in the same place.
+The webview right now has issues in chrome. So for now there is option for iframes but they cannot execute javascript. So The webview closes as soon as it loses focus.
 So 2 html previews cannot be open at one time. This will resolved once the chrome bug is resolved.
 I have tested using windows. You are welcome put the test result /raise issues for other os. The Slim compiler which is installed as gems generate a batch file. So I have
-the command as slim.bat for running as spawn.  
-There is a weird error (backspace/delete key would not work while update base href for html preview in the modal panel)
-if it is any other os I have it as just the command.  
+the command as slim.bat for running as spawn.  if it is any other os I have it as just the command.  
+~~There is a weird error (backspace/delete key would not work while update base href for html preview in the modal panel)~~
+
 You are welcome to contribute by adding new precompile options/submit issues to the github repo.
 
 
