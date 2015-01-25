@@ -229,8 +229,8 @@ module.exports =
 
   serialize: ->
     viewState = []
-    for view in views
-      viewState.push view.serialize()
+    for view in @views
+      viewState.push if view.serialize?()
     previewState: @previewStatus.serialize()
     viewState : viewState
     projectState: atom.project.get('preview-plus.project')
