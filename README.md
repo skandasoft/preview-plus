@@ -61,8 +61,8 @@ Issues
 -----------
 ~~When the Compiler put up the preview in the split screen and the editor is closed with the preview tab still on Then there is a errror when reopening.  
 I will raise it up in the discussion forum.~~
-click on save when it asks for save/cancel..this bring it up in the same place but without the split screen.
-The webview right now has issues in chrome. So for now there is option for iframes but they cannot execute javascript. So The webview closes as soon as it loses focus.
+~~click on save when it asks for save/cancel..this bring it up in the same place but without the split screen.~~
+The webview right now has issues in chrome. So for now there is option for iframes but they cannot execute javascript. So The webview closes as soon as it loses focus.(I think this is going to go away )
 So 2 html previews cannot be open at one time. This will resolved once the chrome bug is resolved.
 I have tested using windows. You are welcome put the test result /raise issues for other os. The Slim compiler which is installed as gems generate a batch file. So I have
 the command as slim.bat for running as spawn.  if it is any other os I have it as just the command.  
