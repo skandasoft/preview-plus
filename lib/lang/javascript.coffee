@@ -1,4 +1,4 @@
-loophole = require 'loophole'
+loophole = require './eval'
 js2c = loophole.allowUnsafe -> require 'js2coffee'
 jQuery = require 'jquery'
 

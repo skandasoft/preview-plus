@@ -1,4 +1,4 @@
-loophole = require 'loophole'
+loophole = require './eval'
 jade = loophole.allowUnsafe -> require 'jade'
 
 module.exports =

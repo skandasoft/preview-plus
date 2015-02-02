@@ -1,4 +1,4 @@
-loophole = require 'loophole'
+loophole = require './eval'
 c2s = require 'css2stylus'
 c2l = require 'css2less'
 command = require './command'

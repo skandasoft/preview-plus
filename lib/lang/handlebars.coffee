@@ -1,4 +1,4 @@
-loophole = require 'loophole'
+loophole = require './eval'
 hb = loophole.allowUnsafe -> require 'handlebars'
 module.exports =
 
