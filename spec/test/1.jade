@@ -1,6 +1,28 @@
+//- 
+  <pp-data>  
+    {
+      maintainer:
+        { 
+          name: 'Forbeee Lindesay', 
+          twitter: '@ForbesLindesay',
+          blog: 'forbeslindesay.co.uk'
+        }
+    }
+  </pp-data>
+  
 html
   head
     script.
       alert('helelo')
   body
     | JadeMe
+    h1
+      | Maintainer:
+      = ' ' + maintainer.name
+    table
+      tr
+        td Twitter
+        td= maintainer.twitter
+      tr
+        td Blog
+        td= maintainer.blog
