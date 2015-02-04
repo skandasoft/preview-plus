@@ -194,6 +194,7 @@ module.exports =
                         searchAllPanes:true
                         split: split
               .then (@view)=>
+                    @view.save = ->
                     @views.push @view
                     if @toKey is 'htmlu'
                       @view.setTextorUrl url:@getUrl editor
