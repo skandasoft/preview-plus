@@ -7,6 +7,10 @@ module.exports =
     default: true
     type: 'boolean'
     title: 'Set Cursor Focus Back'
+  htmlurl:
+    default: false
+    type: 'boolean'
+    title: 'HTML URL'
 
   liveMilliseconds:
     title: 'MilliSeconds'

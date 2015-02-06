@@ -199,7 +199,10 @@ module.exports =
                     if @toKey is 'htmlu'
                       @view.setTextorUrl url:@getUrl editor
                     else
-                      @view.setText(text)
+                      if @key is 'html' and atom.config.get('preview-plus.htmlurl') and not editor.getSelectedText()
+                        @view.setTextorUrl url:editor.getPath()
+                      else
+                        @view.setText(text)
                     if ext is 'htmlp'
                       console.log text
                     else
