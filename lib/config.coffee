@@ -66,6 +66,31 @@ module.exports =
       ext:'htmlp'
       compile:'htmlp'
 
+  ect:
+    name: 'ECT'
+    title: 'ECT 2'
+    type: 'string'
+    fileTypes: ['ect']
+    filePath: true
+    default: 'HTML'
+    enum: ['HTML','htmlp','htmlu']
+    HTML:
+      ext:'html'
+      compile:'html'
+      # options:
+        # open: '{{'
+        # close: '}}'
+
+    htmlp:
+      compile:'htmlp'
+      ext:'htmlp'
+      # options:
+      #   open: '{{'
+      #   close: '}}'
+
+    htmlu:
+      ext:'htmlp'
+
   jade:
     name: 'Jade'
     title: 'Jade 2'

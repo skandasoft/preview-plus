@@ -140,7 +140,11 @@ module.exports =
       else
         to.options = jQuery.extend to.options, options #object
       # pass it
-      compiled = lang[to.compile](text,to.options,data)
+      filePath = editor.getPath()
+      if @config[@key].filePath
+        compiled = lang[to.compile](filePath,to.options,data)
+      else
+        compiled = lang[to.compile](text,to.options,data)
     #
       if typeof compiled is 'string'
         @preview(editor,compiled)
