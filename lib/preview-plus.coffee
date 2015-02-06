@@ -20,9 +20,9 @@ module.exports =
       if editor = atom.workspace.getActiveEditor()
         key = @getGrammar editor
         if atom.config.get('preview-plus.htmlp')
-          if 'htmlu' in @config[key].enums and atom.project.get('preview-plus.cproject').htmlu
+          if 'htmlu' in @config[key]["enum"] and atom.project.get('preview-plus.cproject').htmlu
             return @previewStatus.updateCompileTo('htmlu')
-          @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key].enums
+          @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key]["enum"]
         else
           @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
 
