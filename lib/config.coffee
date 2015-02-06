@@ -34,7 +34,7 @@ module.exports =
     # description: 'CoffeeScript 2'
     type: 'string'
     default: 'JavaScript'
-    enums: ['JavaScript','HTML','htmlp']
+    enum: ['JavaScript','HTML','htmlp']
     alias: ['CoffeeScript (Literate)']
     fileTypes: ['coff']
     JavaScript:
@@ -54,7 +54,7 @@ module.exports =
     # description: 'JavaScript 2'
     type: 'string'
     default: 'CoffeeScript'
-    enums: ['CoffeeScript','HTML','htmlp']
+    enum: ['CoffeeScript','HTML','htmlp']
     CoffeeScript:
       ext: 'coffee'
       compile: 'cs'
@@ -72,7 +72,7 @@ module.exports =
     # description: 'Jade 2'
     type: 'string'
     default: 'HTML'
-    enums: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp','htmlu']
     HTML:
       ext:'html'
       compile:'html'
@@ -89,7 +89,7 @@ module.exports =
     # description: 'Slim 2'
     type: 'string'
     default: 'HTML'
-    enums: ['HTML','htmlp','erb','htmlu']
+    enum: ['HTML','htmlp','erb','htmlu']
     HTML:
       ext:'html'
       compile: 'html'
@@ -111,7 +111,7 @@ module.exports =
     type: 'string'
     cssURL: 'http://jasonm23.github.io/markdown-css-themes/markdown1.css'
     default: 'HTML'
-    enums: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp','htmlu']
     HTML:
       ext:'html'
       compile: 'html'
@@ -126,7 +126,7 @@ module.exports =
     title: 'TypeScript 2'
     type: 'string'
     default: 'JavaScript'
-    enums: ['JavaScript']
+    enum: ['JavaScript']
     JavaScript:
       ext:'js'
       compile:'js'
@@ -138,7 +138,7 @@ module.exports =
     title: 'JSX 2'
     type: 'string'
     default: 'JavaScript'
-    enums: ['JavaScript','HTML','htmlp']
+    enum: ['JavaScript','HTML','htmlp']
     JavaScript:
       ext:'js'
       compile:'js'
@@ -158,7 +158,7 @@ module.exports =
     title: 'ERB 2'
     type: 'string'
     default: 'HAML'
-    enums: ['HAML','htmlu']
+    enum: ['HAML','htmlu']
     fileTypes:['erb']
     HAML:
       ext:'haml'
@@ -173,7 +173,7 @@ module.exports =
     title: 'HAML 2'
     type: 'string'
     default: 'HTML'
-    enums: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp','htmlu']
     HTML:
       ext:'html'
       compile:'html'
@@ -188,8 +188,8 @@ module.exports =
     title: 'HTML 2'
     type: 'string'
     default: 'htmlp'
-    # enums: ['htmlp','Jade','Ruby Slim','GitHub Markdown','JSX','HAML']
-    enums: ['htmlp','Jade','Ruby Slim','HAML','htmlu']
+    # enum: ['htmlp','Jade','Ruby Slim','GitHub Markdown','JSX','HAML']
+    enum: ['htmlp','Jade','Ruby Slim','HAML','htmlu']
     Jade:
       ext: 'jade'
       compile:'jade'
@@ -219,7 +219,7 @@ module.exports =
     # description: 'CSS 2'
     type: 'string'
     default: 'Stylus'
-    enums: ['Stylus','LESS','Sass','SCSS']
+    enum: ['Stylus','LESS','Sass','SCSS']
     Stylus:
       ext: 'styl'
       compile: 'stylus'
@@ -244,7 +244,7 @@ module.exports =
     # description: 'LESS 2'
     type: 'string'
     default: 'CSS'
-    enums: ['CSS']
+    enum: ['CSS']
     CSS:
       ext: 'css'
       compile: 'css'
@@ -255,7 +255,7 @@ module.exports =
     # description: 'Stylus 2'
     type: 'string'
     default: 'CSS'
-    enums: ['CSS']
+    enum: ['CSS']
     CSS:
       ext: 'css'
       compile:'css'
@@ -266,7 +266,7 @@ module.exports =
     title: 'Sass 2'
     type: 'string'
     default: 'CSS'
-    enums: ['CSS']
+    enum: ['CSS']
     CSS:
       ext: 'css'
       compile:'css'
@@ -277,7 +277,7 @@ module.exports =
     title: 'Scss 2'
     type: 'string'
     default: 'CSS'
-    enums: ['CSS']
+    enum: ['CSS']
     CSS:
       ext: 'css'
       compile:'css'
@@ -288,7 +288,7 @@ module.exports =
     title: 'Handlebars 2'
     type: 'string'
     default: 'HTML'
-    enums: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp','htmlu']
     alias: ['HTML (Mustache)']
     fileTypes: ['handlebars']
     HTML:
@@ -305,7 +305,7 @@ module.exports =
     title: 'CJSX 2'
     type: 'string'
     default: 'HTML'
-    enums: ['JavaScript','HTML','htmlp','CoffeeScript']
+    enum: ['JavaScript','HTML','htmlp','CoffeeScript']
     scripts:['https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js']
     resources:
       csss:[]
