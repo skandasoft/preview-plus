@@ -78,8 +78,8 @@ module.exports =
       ext:'html'
       compile:'html'
       # options:
-        # open: '{{'
-        # close: '}}'
+      #   open: '{{'
+      #   close: '}}'
 
     htmlp:
       compile:'htmlp'

@@ -7,6 +7,7 @@ PPError = (@name,@message)->
 PPError.prototype = new Error()
 PreviewEditor = require './editor'
 PanelView = require './panel-view'
+Watch = require './watch'
 
 module.exports =
   config: require './config'
@@ -43,10 +44,8 @@ module.exports =
   activate: (@state) ->
     @updateProject() if atom.project.path
     atom.project.on 'path-changed', @updateProject
-
     atom.packages.onDidActivateAll =>
       {statusBar} = atom.workspaceView
-
       if statusBar?
           PreviewStatusView = require './status-view'
           @previewStatus = new PreviewStatusView(@)
@@ -111,10 +110,15 @@ module.exports =
       atom.workspace.addModalPanel item: @htmlBaseView
       @htmlBaseView.base.focus()
 
-  toggle: ->
-
+  toggle: (filePath)->
     try
-      return unless editor = atom.workspace.getActiveEditor()
+      editor = null
+      if filePath
+        editors = atom.workspace.getEditors()
+        editor = ed for ed in editors when ed.getUri() is filePath
+      else
+        editor = atom.workspace.getActiveEditor()
+      return unless editor
       text = @getText editor
       cfgs = atom.config.get('preview-plus')
 
@@ -141,7 +145,7 @@ module.exports =
         to.options = jQuery.extend to.options, options #object
       # pass it
       filePath = editor.getPath()
-      if @config[@key].filePath
+      if @config[@key]['filePath']
         compiled = lang[to.compile](filePath,to.options,data)
       else
         compiled = lang[to.compile](text,to.options,data)
@@ -198,8 +202,18 @@ module.exports =
                         searchAllPanes:true
                         split: split
               .then (@view)=>
-                    @view.save = ->
-                    @views.push @view
+                    unless @view.pp?.orgURI
+                      @view.save = ->
+                      @view.pp = {}
+                      @view.pp.orgURI = editor.getUri()
+                      cproject = atom.project.get('preview-plus.cproject')
+                      @watcher = new Watch(cproject.watch) if cproject.watch and not @watcher
+                      @view.addSubscription editor.onDidDestroy =>
+                        @view.destroy()
+                      if @watcher
+                        subcription = @view.addSubscription @watcher.onDidChange =>
+                          @toggle @view.pp.orgURI
+                      @views.push @view
                     if @toKey is 'htmlu'
                       @view.setTextorUrl url:@getUrl editor
                     else

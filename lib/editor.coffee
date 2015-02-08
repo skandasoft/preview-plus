@@ -21,15 +21,20 @@ module.exports =
         'background-color': '#fff'
 
       if atom.config.get('preview-plus.webview')
-        unless @subscription
-          @pane = atom.workspace.getActivePane()
-          @subscription = @pane.onDidChangeActiveItem (item)=>
-            if item isnt @
-              @destroy()
-              @subscription.dispose()
+        # unless @subscription
+        #   @pane = atom.workspace.getActivePane()
+          # @subscription = @pane.onDidChangeActiveItem (item)=>
+          #   if item isnt @
+          #     @destroy()
+          #     @subscription.dispose()
         webview.attr disablewebsecurity:true
         if obj.url
-          webview.attr src:obj.url
+          # webview[0].reload() if webview.attr('src') is obj.url
+          # webview.attr('src',' ') if (src = webview.attr('src')) and src is obj.url
+          # webview.attr src:obj.url
+          wv = $('<webview></webview>')
+          webview.replaceWith(wv)
+          wv.attr src:obj.url
         else
           unless @replaceText('base',obj,false)
             unless @replaceText('head',obj)
@@ -42,7 +47,7 @@ module.exports =
         if obj.url
           webview.attr src:obj.url
         else
-          webview.attr srcdoc: obj.text
+          webview.attr srcdoc: obj.texatomt
 
     replaceText: (tag,obj,replace=true)->
             text = obj.text

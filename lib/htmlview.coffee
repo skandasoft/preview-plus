@@ -14,6 +14,7 @@ class HTMLView extends View
   initialize: ->
 
     if atom.config.get('preview-plus.webview')
+      @element.onkeydown = =>@showDevTool(arguments)
     else
       iframe = @find('iframe')[0]
       $(iframe).attr
@@ -22,6 +23,9 @@ class HTMLView extends View
             style: "overflow:hidden;height:100%;width:100%"
             width: '100%'
             height: '100%'
+
+  showDevTool: (evt)->
+    @children()[0].openDevTools() if evt[0].keyIdentifier is "F12"
 
   getTitle: ->
     @model.getTitle()
