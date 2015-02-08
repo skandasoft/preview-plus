@@ -68,6 +68,6 @@
     "theorist": "~1.0.2",
     "react-tools": "0.12.2",
     "ect": "~0.5.9",
-    "chokidar": "~1.0.0"
+    "chokidar": ">0.12.6"
   }
 }
