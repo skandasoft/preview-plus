@@ -1,10 +1,10 @@
 command = require './command'
 module.exports =
-  html: (text,options=['-s','-p'])->
-    command.compile text,'slimrb',options
+  html: (fpath,text,options=['-s','-p'])->
+    command.compile fpath,text,'slimrb',options
 
-  erb: (text,options=['-s','-e'])->
-    command.compile text,'slimrb',options
+  erb: (fpath,text,options=['-s','-e'])->
+    command.compile fpath,text,'slimrb',options
 
-  htmlp: (text,options)->
-    @html(text,options)
+  htmlp: (fpath,text,options)->
+    @html(fpath,text,options)

@@ -1,8 +1,8 @@
 config = require '../config'
 
 module.exports = (js=true,src)->
-  html: (text,options={},data={})->
-    text = @js(text,options) if js
+  html: (fpath,text,options={},data={})->
+    text = @js(fpath,text,options) if js
     SCRIPT = CSS = ''
     srcdir = atom.project.get('preview-plus.srcdir')
     if src
@@ -29,5 +29,5 @@ module.exports = (js=true,src)->
         </body>
       </html>
     """
-  htmlp: (text,options={},data={})->
-    @html(text,options,data)
+  htmlp: (fpath,text,options={},data={})->
+    @html(fpath,text,options,data)

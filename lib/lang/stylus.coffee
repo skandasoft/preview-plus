@@ -1,6 +1,6 @@
 stylus =require 'stylus'
 module.exports =
-  css: (text,options={})->
+  css: (fpath,text,options={})->
 
     stylus(text)
       .set options

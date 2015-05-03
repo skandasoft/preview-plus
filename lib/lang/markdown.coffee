@@ -1,7 +1,7 @@
 marked = require 'marked'
 config = require '../config'
 module.exports =
-  html:(text,options={})->
+  html:(fpath,text,options={})->
     marked.setOptions options
       # renderer: new marked.Renderer(),
       # gfm: true,
@@ -13,12 +13,12 @@ module.exports =
       # smartypants: false
     marked text
 
-  htmlp:(text,options={})->
+  htmlp:(fpath,text,options={})->
     if cssURL = config.markdown.cssURL
       css = "<link rel='stylesheet' type='text/css' href='#{cssURL}'>"
     else
       css = "<link rel='stylesheet' type='text/css' href='file:///#{atom.workspace.srcdir}/resources/markdown.css'>"
-    html = @html(text,options)
+    html = @html(fpath,text,options)
     """
     <html>
       <head>

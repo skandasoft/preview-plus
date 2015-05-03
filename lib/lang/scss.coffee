@@ -1,5 +1,5 @@
 command = require './command'
 module.exports =
-  css: (text,options=['-s','--SCSS'])->
+  css: (fpath,text,options=['-s','--SCSS'])->
       # command.compileFile text,'sass',options
-      command.compile text,'sass',options
+      command.compile fpath,text,'sass',options

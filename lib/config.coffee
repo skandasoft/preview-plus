@@ -7,10 +7,6 @@ module.exports =
     default: true
     type: 'boolean'
     title: 'Set Cursor Focus Back'
-  htmlurl:
-    default: false
-    type: 'boolean'
-    title: 'HTML URL'
 
   liveMilliseconds:
     title: 'MilliSeconds'
@@ -73,23 +69,20 @@ module.exports =
     fileTypes: ['ect']
     filePath: true
     default: 'HTML'
-    enum: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp']
     HTML:
       ext:'html'
       compile:'html'
-      # options:
-      #   open: '{{'
-      #   close: '}}'
+      options:
+        open: '{{'
+        close: '}}'
 
     htmlp:
       compile:'htmlp'
       ext:'htmlp'
-      # options:
-      #   open: '{{'
-      #   close: '}}'
-
-    htmlu:
-      ext:'htmlp'
+      options:
+        open: '{{'
+        close: '}}'
 
   jade:
     name: 'Jade'
@@ -97,15 +90,13 @@ module.exports =
     # description: 'Jade 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp']
     HTML:
       ext:'html'
       compile:'html'
       options: pretty:true
     htmlp:
       compile:'htmlp'
-      ext:'htmlp'
-    htmlu:
       ext:'htmlp'
 
   slim:
@@ -114,7 +105,7 @@ module.exports =
     # description: 'Slim 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp','erb','htmlu']
+    enum: ['HTML','htmlp','erb']
     HTML:
       ext:'html'
       compile: 'html'
@@ -123,8 +114,6 @@ module.exports =
       ext:'erb'
       compile: 'erb'
       options: ['-s','-e']
-    htmlu:
-      ext:'htmlp'
     htmlp:
       ext:'htmlp'
       compile: 'htmlp'
@@ -136,15 +125,13 @@ module.exports =
     type: 'string'
     cssURL: 'http://jasonm23.github.io/markdown-css-themes/markdown1.css'
     default: 'HTML'
-    enum: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp']
     HTML:
       ext:'html'
       compile: 'html'
     htmlp:
       ext:'htmlp'
       compile: 'htmlp'
-    htmlu:
-      ext:'htmlp'
 
   typescript:
     name: 'TypeScript'
@@ -183,14 +170,15 @@ module.exports =
     title: 'ERB 2'
     type: 'string'
     default: 'HAML'
-    enum: ['HAML','htmlu']
+    enum: ['HAML','htmlp']
     fileTypes:['erb']
     HAML:
       ext:'haml'
       compile:'haml'
       options: ['-s','-e']
-    htmlu:
+    htmlp:
       ext:'htmlp'
+      compile:'htmlp'
 
   haml:
     name: 'HAML'
@@ -198,15 +186,13 @@ module.exports =
     title: 'HAML 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp']
     HTML:
       ext:'html'
       compile:'html'
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
-    htmlu:
-      ext:'htmlp'
 
   html:
     name:'HTML'
@@ -214,7 +200,7 @@ module.exports =
     type: 'string'
     default: 'htmlp'
     # enum: ['htmlp','Jade','Ruby Slim','GitHub Markdown','JSX','HAML']
-    enum: ['htmlp','Jade','Ruby Slim','HAML','htmlu']
+    enum: ['htmlp','Jade','Ruby Slim','HAML','browser']
     Jade:
       ext: 'jade'
       compile:'jade'
@@ -235,8 +221,9 @@ module.exports =
     HAML:
       ext: 'haml'
       compile: 'haml'
-    htmlu:
-      ext:'htmlp'
+    browser:
+      compile: 'browser'
+      view: require('./status-view').BrowserView
 
   css:
     title: 'CSS 2'
@@ -313,7 +300,7 @@ module.exports =
     title: 'Handlebars 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp','htmlu']
+    enum: ['HTML','htmlp']
     alias: ['HTML (Mustache)']
     fileTypes: ['handlebars']
     HTML:
@@ -322,8 +309,6 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
-    htmlu:
-      ext:'htmlp'
 
   cjsx:
     name: 'CoffeeScript (JSX)'

@@ -10,11 +10,11 @@ jQuery = require 'jquery'
 command = require './command'
 
 module.exports =
-    slim: (text,options=[])->
-      command.compileFile(text,'html2slim',options)
-    jade: (text,options={})->
+    slim: (fpath,text,options=[])->
+      command.compileFile(fpath,text,'html2slim',options)
+    jade: (fpath,text,options={})->
       text = text.replace /\n/g, ''
-      text = text.replace /\s/g, ''
+      # text = text.replace /\s/g, ''
       dfd = new jQuery.Deferred()
       tmp.file (err,fwpath,fw)->
         if err
@@ -48,13 +48,13 @@ module.exports =
     # md: (text)->
     #   md text
 
-    htmlp: (text)->
-      text
-      
+    htmlp: (fpath,text)->
+      if fpath then '' else text
+
     # jsx: (text,options={})->
     #     window.IN_BROWSER = true
     #     converter = new HTMLtoJSX options
     #     converter.convert text
 
-    haml: (text,options=['-s'])->
-      command.compile(text,'html2haml',options)
+    haml: (fpath,text,options=['-s'])->
+      command.compile(fpath,text,'html2haml',options)

@@ -1,8 +1,8 @@
 command = require './command'
 module.exports =
-  html: (text,options=['-s'])->
-      command.compile text,'haml',options
+  html: (fpath,text,options=['-s'])->
+      command.compile fpath,text,'haml',options
 
-  htmlp: (text)->
+  htmlp: (fpath,text)->
     console.log text
-    @html(text)
+    @html(fpath,text)

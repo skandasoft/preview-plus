@@ -4,15 +4,15 @@ c2l = require 'css2less'
 command = require './command'
 module.exports =
 
-  stylus: (text,options={})->
+  stylus: (fpath,text,options={})->
     converter = new c2s.Converter(text)
     converter.processCss(options).output
 
-  less: (text,options={})->
+  less: (fpath,text,options={})->
     loophole.allowUnsafe -> c2l text,options
 
-  sass: (text,options=['SASS'])->
-      command.compile text,'css2sass',options
+  sass: (fpath,text,options=['SASS'])->
+      command.compile fpath,text,'css2sass',options
 
-  scss: (text,options=['SCSS'])->
-      command.compile text,'css2sass',options
+  scss: (fpath,text,options=['SCSS'])->
+      command.compile fpath,text,'css2sass',options

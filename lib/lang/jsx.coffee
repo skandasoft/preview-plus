@@ -3,7 +3,7 @@ beautify = require('js-beautify').js_beautify
 jQuery = require 'jquery'
 
 jsx =
-  js : (text,options={})->
+  js : (fpath,text,options={})->
     compiled = reactTools.transform text,options
     beautify(compiled)
 

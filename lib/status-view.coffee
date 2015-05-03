@@ -1,5 +1,7 @@
 {View,SelectListView} = require("atom")
+exec = require('child_process').exec
 
+$ = require 'jquery'
 class CompilerView extends SelectListView
   initialize: (items,@statusView,item)->
     super
@@ -7,16 +9,52 @@ class CompilerView extends SelectListView
     @setItems items
     atom.workspaceView.append(@)
     @focusFilterEditor()
-    compileTo = @statusView.compileTo.text()
-    @selectItemView @list.find("li:contains('#{compileTo}')")
+    if @statusView.compileTo.children()?.length > 0
+      @selectItemView @list.find("li").has('span')
+    else
+      compileTo = @statusView.compileTo.text()
+      @selectItemView @list.find("li:contains('#{compileTo}')")
 
   viewForItem: (item)->
-    "<li>#{item}</li>"
-
+    if typeof item is 'string'
+      "<li>#{item}</li>"
+    else
+      $li = $('<li></li>').append item.element
+      $li.data('selectList',@)
+      # item
   confirmed: (item)->
     @statusView.updateCompileTo(item)
-    @cancel()
+    if typeof item is 'string'
+      @cancel()
 
+class BrowserView extends View
+  @content: ->
+    # @li click:'openBrowser', =>
+      @span class: 'icon-browser-plus', click:'openBrowser', =>
+        @span class:"icon-chrome",click:'openChrome'
+        @span class:"icon-ie",click:'openIE'
+        @span class:"icon-firefox",click:'openFirefox'
+        @span class:"icon-opera",click:'openOpera'
+
+  openChrome: (evt)->
+    @open('chrome',evt)
+  openIE: (evt)->
+    @open('iexplore',evt)
+  openFirefox: (evt)->
+    @open('firefox',evt)
+  openOpera: (evt)->
+    @open('opera',evt)
+  openBrowser: (evt)->
+    @open('chrome',evt)
+
+  open: (browser,evt)->
+    editor = atom.workspace.getActiveEditor()
+    fpath = editor.getPath()
+    cmd = "start #{browser} #{fpath}"
+    ls = exec cmd
+    li = $(evt.target).closest('li')
+    li.data('selectList')?.cancel() if li.length > 0
+    return false
 
 class StatusView extends View
   @content: ->
@@ -32,12 +70,18 @@ class StatusView extends View
   compilesTo: ->
     key = @model.getGrammar(@editor)
     to =  @editor.get('preview-plus.compileTo')
-    new CompilerView @model.config[key]["enum"],@,to
+    items = for item in @model.config[key]["enum"]
+               if view = @model.config[key][item].view
+                 new @model.config[key][item].view
+               else
+                 item
+    new CompilerView items,@,to
 
-  compile: ->
+  compile: (evt)->
     @clicks++
     if @clicks is 1
       timer = setTimeout =>
+        evt.originalEvent.target.getClass
         @clicks = 0
         @model.toggle()
       ,300
@@ -47,15 +91,32 @@ class StatusView extends View
         cproject = atom.project.get('preview-plus.cproject')
         @updateCompileTo if cproject.htmlu then 'htmlu' else 'htmlp'
         @clicks = 0
+  getCompileTo: (compileTo)->
+    compileToKey = compileTo
+    compileToView = undefined
+    key = @model.getGrammar(@editor)
+    @model.config[key]["enum"]
+    if @model.config[key][compileTo]
+      compileToView = @model.config[key][compileTo].view if @model.config[key][compileTo].view
+    else
+      for item in @model.config[key]["enum"]
+        if @model.config[key][item].view?
+          compileToKey = item if @model.config[key][item].view is compileTo
+          compileToView = new @model.config[key][item].view
+    { compileToKey, compileToView }
 
   updateCompileTo: (compileTo)->
-    if compileTo is 'htmlp'
+    {compileToKey,compileToView} = @getCompileTo(compileTo)
+    if compileToKey is 'htmlp'
       @editor.set('preview-plus.htmlp',true)
     else
       @editor.set('preview-plus.htmlp',false) if @editor.get('preview-plus.htmlp')?
-    @editor.set('preview-plus.compileTo',compileTo)
-    @compileTo.text compileTo
-    @model.toggle()
+    @editor.set('preview-plus.compileTo',compileToKey)
+    if compileToView
+      @compileTo.empty().append compileToView
+    else
+      @compileTo.empty().text compileToKey
+      @model.toggle()
 
   show: ->
     super
@@ -95,22 +156,27 @@ class StatusView extends View
            ('htmlp' in @model.config[key]["enum"] or 'htmlu' in @model.config[key]["enum"])
           @editor.set 'preview-plus.htmlp',atom.config.get('preview-plus.htmlp')
 
-
-      if @editor.get('preview-plus.htmlp')
-         compileTo = if 'htmlu' in @model.config[key]["enum"] and atom.project.get('preview-plus.cproject').htmlu
+      compileToView = compileTo = @editor.get('preview-plus.compileTo')
+      if  @editor.get('preview-plus.htmlp')
+         compileToKey = compileTo = if 'htmlu' in @model.config[key]["enum"] and atom.project.get('preview-plus.cproject')?.htmlu
                        'htmlu'
                      else
                        'htmlp'
-         @editor.set 'preview-plus.compileTo', compileTo
+      else
+        {compileToKey,compileToView} = @getCompileTo compileTo
+      @editor.set 'preview-plus.compileTo', compileToKey
+      if compileToView
+        @compileTo.empty().append compileToView
+      else
+        @compileTo.empty().text compileToKey
 
-      @compileTo.text  @editor.get('preview-plus.compileTo')
       @compileTo.toggleClass 'htmlp',atom.config.get('preview-plus.htmlp') #and @compileTo.text() is 'htmlp'
       @enums.show() if @editor.get('preview-plus.enum')
       @setLive()
     catch e
       @hide()
-      console.log 'Not a Preview-Plus Editor'
+      console.log 'Not a Preview-Plus Editor',e
   hide: ->
     super
   destroy: ->
-module.exports = StatusView
+module.exports = { StatusView, BrowserView }

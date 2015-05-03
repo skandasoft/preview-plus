@@ -39,7 +39,11 @@
     "quick preview",
     "Ruby Slim",
     "css",
-    "scss2css"
+    "scss2css",
+    "browser",
+    "html preview",
+    "web browser",
+    "open in browser"
   ],
   "engines": {
     "atom": ">0.150.0"
@@ -68,6 +72,7 @@
     "theorist": "~1.0.2",
     "react-tools": "0.12.2",
     "ect": "~0.5.9",
-    "chokidar": ">=0.2.6"
+    "chokidar": ">=0.2.6",
+    "event-kit": "~1.1.0"
   }
 }

@@ -5,7 +5,6 @@ jQuery = require 'jquery'
 loophole = require 'loophole'
 PPError = (@name,@message)->
 PPError.prototype = new Error()
-PreviewEditor = require './editor'
 PanelView = require './panel-view'
 Watch = require './watch'
 
@@ -21,8 +20,6 @@ module.exports =
       if editor = atom.workspace.getActiveEditor()
         key = @getGrammar editor
         if atom.config.get('preview-plus.htmlp')
-          if 'htmlu' in @config[key]["enum"] and atom.project.get('preview-plus.cproject').htmlu
-            return @previewStatus.updateCompileTo('htmlu')
           @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key]["enum"]
         else
           @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
@@ -34,26 +31,25 @@ module.exports =
 
   updateProject: ->
     project = @state?.projectState or {}
-    cproject = project[atom.project.path] ?= {}
-    cproject.base ?= atom.project.path
+    projectPath = atom.project.getPaths()[0]
+    cproject = project[projectPath] ?= {}
+    cproject.base ?= projectPath
     cproject.url ?= 'http://localhost'
     atom.project.set 'preview-plus.project',project
     atom.project.set 'preview-plus.cproject',cproject
     atom.project.set 'preview-plus.srcdir', __dirname
 
   activate: (@state) ->
-    @updateProject() if atom.project.path
+    atom.project.set 'preview-plus.srcdir', __dirname
+    @updateProject()
     atom.project.on 'path-changed', @updateProject
     atom.packages.onDidActivateAll =>
       {statusBar} = atom.workspaceView
       if statusBar?
-          PreviewStatusView = require './status-view'
-          @previewStatus = new PreviewStatusView(@)
+          {StatusView} = require './status-view'
+          @previewStatus = new StatusView(@)
           activePane = atom.workspace.getActivePaneItem()
           @previewStatus.setCompilesTo activePane
-
-    atom.workspace.addOpener (uri)->
-      return new PreviewEditor(uri) if path.extname(uri) is '.htmlp'
 
     atom.workspace.onDidChangeActivePaneItem (activePane)=>
       return unless activePane
@@ -110,16 +106,16 @@ module.exports =
       atom.workspace.addModalPanel item: @htmlBaseView
       @htmlBaseView.base.focus()
 
-  toggle: (filePath)->
+  toggle: (opts={})->
     try
       editor = null
-      if filePath
+      if opts.filePath
         editors = atom.workspace.getEditors()
         editor = ed for ed in editors when ed.getUri() is filePath
       else
         editor = atom.workspace.getActiveEditor()
       return unless editor
-      text = @getText editor
+      {text,fpath} = @getText editor
       cfgs = atom.config.get('preview-plus')
 
       if editor.get('preview-plus.livePreview') and not (editor in @liveEditors)
@@ -132,8 +128,6 @@ module.exports =
       @key = @getGrammar editor
 
       @toKey = @getCompileTo editor,@key
-      if @toKey is 'htmlu'
-          return @preview(editor)
       to = @config[@key][@toKey]
       lang = require "./lang/#{@key}"
       data = @getContent('data',text)
@@ -144,18 +138,20 @@ module.exports =
       else
         to.options = jQuery.extend to.options, options #object
       # pass it
-      filePath = editor.getPath()
-      if @config[@key]['filePath']
-        compiled = lang[to.compile](filePath,to.options,data)
-      else
-        compiled = lang[to.compile](text,to.options,data)
+      # filePath = editor.getPath()
+      # if @config[@key]['filePath']
+      #   compiled = lang[to.compile](filePath,to.options,data)
+      # else
+      # if fpath and @key is 'html' and @toKey is 'htmlp'
+      #   return atom.workspace.open "file://#{fpath}", split: @getPosition(editor)
+      compiled = lang[to.compile](fpath,text,to.options,data)
     #
       if typeof compiled is 'string'
-        @preview(editor,compiled)
+        @preview(editor,fpath,compiled)
       else
         dfd = compiled
         dfd.done (text)=>
-          @preview(editor,text) if @compiled = text
+          @preview(editor,fpath,text) if @compiled = text
         dfd.fail (text)->
           e = new Error()
           e.name = 'console'
@@ -171,7 +167,7 @@ module.exports =
           {first_line} = e.location
           error = text.split('\n')[0...first_line].join('\n')
         error += '\n'+e.toString().split('\n')[1..-1].join('\n')+'\n'+e.message
-        @preview editor,error,true
+        @preview editor,fpath,error,true
 
   getContent: (tag,text)->
       regex = new RegExp("<pp-#{tag}>([\\s\\S]*?)</pp-#{tag}>")
@@ -180,18 +176,24 @@ module.exports =
         data = loophole.allowUnsafeEval ->
             eval "(#{match[1]})"
 
-  preview: (editor,text,err=false)->
-    # otherwise check the individual
+  preview: (editor,fpath,text,err=false)->
     activePane = atom.workspace.paneForItem(editor)
-    split = @getPosition activePane
+    split = @getPosition editor
     to = @config[@key]?[@toKey]
     return atom.confirm 'Cannot Preview' unless to
     ext = if err then "#{to.ext}.err" else to.ext
-    # title = "preview-plus:#{path.dirname(editor.getPath())}/preview~#{editor.getTitle()}.#{ext}"
-    title = "preview~#{editor.getTitle()}.#{ext}"
+    # title = "preview-plus://#{path.dirname(editor.getPath())}/preview~#{editor.getTitle()}.#{ext}"
+    if text
+      if @toKey is 'htmlp'
+        title = "browser-plus:///#{editor.getPath().replace(/\\/g,"/")}p"
+      else
+        title = "preview~#{editor.getTitle()}.#{ext}"
+    else
+      fpath = fpath.replace(/\\/g,"/")
+      title = "file:///#{fpath}"
     grammar = if to and not err then to.ext  else syntax = editor.getGrammar()
     syntax ?= atom.syntax.selectGrammar(grammar)
-    if not err and editor.getSelectedText() and (@toKey isnt 'htmlp' and @toKey isnt 'htmlu')
+    if not err and editor.getSelectedText() and @toKey isnt 'htmlp'
       if @panelItem
         @panelItem.showPanel(text,syntax)
       else
@@ -201,6 +203,7 @@ module.exports =
       atom.workspace.open title,
                         searchAllPanes:true
                         split: split
+                        src: text
               .then (@view)=>
                     unless @view.pp?.orgURI
                       @view.save = ->
@@ -211,16 +214,14 @@ module.exports =
                       @view.addSubscription editor.onDidDestroy =>
                         @view.destroy()
                       if @watcher
-                        subcription = @view.addSubscription @watcher.onDidChange =>
-                          @toggle @view.pp.orgURI
+                        subscription = @view.addSubscription @watcher.onDidChange =>
+                          @toggle {filePath:@view.pp.orgURI}
                       @views.push @view
-                    if @toKey is 'htmlu'
-                      @view.setTextorUrl url:@getUrl editor
+                    if @key is 'html' and not text
+                      # @view.setTextorUrl url:editor.getPath()
+                      # @view.view.liveReload()
                     else
-                      if @key is 'html' and atom.config.get('preview-plus.htmlurl') and not editor.getSelectedText()
-                        @view.setTextorUrl url:editor.getPath()
-                      else
-                        @view.setText(text)
+                      @view.setText(text)
                     if ext is 'htmlp'
                       console.log text
                     else
@@ -262,7 +263,8 @@ module.exports =
       atom.commands.dispatch(view[0],'preview-plus:preview')
 
   getGrammar: (editor)->
-    grammar = editor.getGrammar()
+    grammar = editor.getGrammar?()
+    return false unless grammar
     key = null
     cfg = _.find @config, (val,k)->
               key = k
@@ -285,7 +287,8 @@ module.exports =
 
     if cfg then key else throw new PPError 'alert','Set the Grammar for the Editor'
 
-  getPosition: (activePane)->
+  getPosition: (editor)->
+    activePane = atom.workspace.paneForItem(editor)
     paneAxis = activePane.getParent()
     paneIndex = paneAxis.getPanes().indexOf(activePane)
     orientation = paneAxis.orientation ? 'horizontal'
@@ -303,5 +306,6 @@ module.exports =
 
   getText: (editor)->
     selected = editor.getSelectedText()
+    fpath = editor.getPath() unless ( selected or editor.get('preview-plus.livePreview'))
     text = selected or editor.getText()
-    if text.length is 0 or !text.trim() then throw new PPError 'alert','No Code to Compile' else text
+    if text.length is 0 or !text.trim() then throw new PPError 'alert','No Code to Compile' else { text, fpath}

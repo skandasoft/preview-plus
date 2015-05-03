@@ -4,11 +4,11 @@ beautify = require('js-beautify').js_beautify
 jQuery = require 'jquery'
 
 cjsx =
-  cs: (text,options={},data={})->
+  cs: (fpath,text,options={},data={})->
     transform text
 
-  js: (text,options={},data={})->
-    transformed = @cs(text,options,data)
+  js: (fpath,text,options={},data={})->
+    transformed = @cs(fpath,text,options,data)
     compiled = coffee.compile transformed, options
     beautify(compiled)
 

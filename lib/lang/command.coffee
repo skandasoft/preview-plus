@@ -7,7 +7,7 @@ fs = require 'fs'
 path = require 'path'
 
 module.exports =
-  compile: (text,cmd,options=['-s'])->
+  compile: (fpath,text,cmd,options=['-s'])->
       dfd = new jQuery.Deferred()
       if process.platform[0..2] is 'win'
         cmd = "#{cmd}.bat"
@@ -26,7 +26,7 @@ module.exports =
       stream.pipe ls.stdin
       dfd.promise()
 
-  compileFile: (text,cmd,options={})->
+  compileFile: (fpath,text,cmd,options={})->
       dfd = new jQuery.Deferred()
       tmp.file (err,fwpath,fw)->
         if err

@@ -1,5 +1,6 @@
 # preview-plus package Preview Anything to Anything
 ----------------------------------------------------
+INSTALL  BROWSER-PLUS --> apm install browser-plus or check out in the packages
 
 One Utility to handle the following matrix of previews
 * Coffeescript: ['JavaScript','HTML','htmlp']

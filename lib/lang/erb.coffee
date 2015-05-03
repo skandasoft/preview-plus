@@ -1,5 +1,5 @@
 command = require './command'
 
 module.exports =
-  haml: (text,options=['-s','-e'])->
-      command.compile text,'html2haml',options
+  haml: (fpath,text,options=['-s','-e'])->
+      command.compile fpath,text,'html2haml',options
