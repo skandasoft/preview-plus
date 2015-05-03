@@ -73,10 +73,6 @@
     "react-tools": "0.12.2",
     "ect": "~0.5.9",
     "chokidar": ">=0.2.6",
-<<<<<<< HEAD
     "event-kit": "~1.0.2"
-=======
-    "event-kit": "~1.0.2"
->>>>>>> e9d71bdf9a3977c575dbce2a7675529dae172668
   }
 }
