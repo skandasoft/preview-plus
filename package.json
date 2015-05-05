@@ -52,6 +52,13 @@
     "loophole",
     "js2coffee"
   ],
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    }
+  },  
   "dependencies": {
     "coffee-react-transform": "~2.2.1",
     "coffee-script": "~1.8.0",

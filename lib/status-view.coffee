@@ -8,7 +8,7 @@ class CompilerView extends SelectListView
     super
     @addClass 'overlay from-top'
     @setItems items
-    atom.workspaceView.append(@)
+    atom.workspace.addModalPanel item:@
     @focusFilterEditor()
     if @statusView.compileTo.children()?.length > 0
       @selectItemView @list.find("li").has('span')
@@ -25,8 +25,9 @@ class CompilerView extends SelectListView
       # item
   confirmed: (item)->
     @statusView.updateCompileTo(item)
-    # if typeof item is 'string'
-    @cancel()
+    if typeof item is 'string'
+      @cancel()
+      @remove()
 
 class BrowserView extends View
   @content: ->
@@ -54,7 +55,9 @@ class BrowserView extends View
     cmd = "start #{browser} #{fpath}"
     ls = exec cmd
     li = $(evt.target).closest('li')
-    li.data('selectList')?.cancel() if li.length > 0
+    if li.length > 0 and li.data('selectList')?
+      li.data('selectList').cancel()
+      li.data('selectList').remove()
     return false
 
 class StatusView extends View
@@ -65,7 +68,8 @@ class StatusView extends View
       @span "▼", class:"enums",outlet:"enums", click:'compilesTo'
 
   initialize: (@model)->
-    atom.workspaceView.statusBar?.appendRight @
+    debugger
+    @statusBarTile = @model.statusBar.addRightTile {item:@, priority:9999}
     @clicks = 0
 
   compilesTo: ->

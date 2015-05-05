@@ -39,17 +39,18 @@ module.exports =
     atom.project.set 'preview-plus.cproject',cproject
     atom.project.set 'preview-plus.srcdir', __dirname
 
+
+  consumeStatusBar: (statusBar)->
+    @statusBar = statusBar
+    {StatusView} = require './status-view'
+    @previewStatus = new StatusView(@)
+    activePane = atom.workspace.getActivePaneItem()
+    @previewStatus.setCompilesTo activePane
+
   activate: (@state) ->
     atom.project.set 'preview-plus.srcdir', __dirname
     @updateProject()
-    atom.project.on 'path-changed', @updateProject
-    atom.packages.onDidActivateAll =>
-      {statusBar} = atom.workspaceView
-      if statusBar?
-          {StatusView} = require './status-view'
-          @previewStatus = new StatusView(@)
-          activePane = atom.workspace.getActivePaneItem()
-          @previewStatus.setCompilesTo activePane
+    atom.project.onDidChangePaths @updateProject
 
     atom.workspace.onDidChangeActivePaneItem (activePane)=>
       return unless activePane
@@ -226,7 +227,7 @@ module.exports =
                       console.log text
                     else
                       @view.setGrammar syntax
-                      @view.moveCursorToTop()
+                      @view.moveToTop()
                     compiledPane = atom.workspace.getActivePane()
                     uri = @view.getURI()
                     if path.extname(title) is '.err'
