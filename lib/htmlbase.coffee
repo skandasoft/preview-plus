@@ -1,4 +1,5 @@
-{$, $$,$$$, View}  = require 'atom'
+{$, View} = require 'atom-space-pen-views'
+
 Watch = require './watch'
 module.exports =
 

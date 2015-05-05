@@ -1,4 +1,5 @@
-{$, $$,$$$, ScrollView,TextEditor}  = require 'atom'
+{TextEditor}  = require 'atom'
+{$, ScrollView} = require 'atom-space-pen-views'
 
 module.exports =
 class PanelView extends ScrollView

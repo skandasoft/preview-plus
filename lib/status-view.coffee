@@ -1,4 +1,5 @@
-{View,SelectListView} = require("atom")
+{View,SelectListView} = require 'atom-space-pen-views'
+
 exec = require('child_process').exec
 
 $ = require 'jquery'
@@ -24,8 +25,8 @@ class CompilerView extends SelectListView
       # item
   confirmed: (item)->
     @statusView.updateCompileTo(item)
-    if typeof item is 'string'
-      @cancel()
+    # if typeof item is 'string'
+    @cancel()
 
 class BrowserView extends View
   @content: ->

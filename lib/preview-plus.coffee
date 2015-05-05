@@ -113,7 +113,7 @@ module.exports =
         editors = atom.workspace.getEditors()
         editor = ed for ed in editors when ed.getUri() is filePath
       else
-        editor = atom.workspace.getActiveEditor()
+        editor = atom.workspace.getActiveTextEditor()
       return unless editor
       {text,fpath} = @getText editor
       cfgs = atom.config.get('preview-plus')
@@ -185,14 +185,14 @@ module.exports =
     # title = "preview-plus://#{path.dirname(editor.getPath())}/preview~#{editor.getTitle()}.#{ext}"
     if text
       if @toKey is 'htmlp'
-        title = "browser-plus:///#{editor.getPath().replace(/\\/g,"/")}p"
+        title = "browser-plus:///#{(editor.getPath() or editor.getTitle()).replace(/\\/g,"/")}.htmlp"
       else
         title = "preview~#{editor.getTitle()}.#{ext}"
     else
       fpath = fpath.replace(/\\/g,"/")
       title = "file:///#{fpath}"
     grammar = if to and not err then to.ext  else syntax = editor.getGrammar()
-    syntax ?= atom.syntax.selectGrammar(grammar)
+    syntax ?= atom.grammars.selectGrammar(grammar)
     if not err and editor.getSelectedText() and @toKey isnt 'htmlp'
       if @panelItem
         @panelItem.showPanel(text,syntax)
@@ -208,7 +208,7 @@ module.exports =
                     unless @view.pp?.orgURI
                       @view.save = ->
                       @view.pp = {}
-                      @view.pp.orgURI = editor.getUri()
+                      @view.pp.orgURI = editor.getURI()
                       cproject = atom.project.get('preview-plus.cproject')
                       @watcher = new Watch(cproject.watch) if cproject.watch and not @watcher
                       @view.addSubscription editor.onDidDestroy =>
@@ -228,12 +228,12 @@ module.exports =
                       @view.setGrammar syntax
                       @view.moveCursorToTop()
                     compiledPane = atom.workspace.getActivePane()
-                    uri = @view.getUri()
+                    uri = @view.getURI()
                     if path.extname(title) is '.err'
                       uri = uri.replace '.err',''
                       errView = compiledPane.itemForUri uri
                     else
-                      errView = compiledPane.itemForUri "#{uri}.err"
+                      errView = compiledPane.itemForURI "#{uri}.err"
                     errView.destroy() if errView
                     activePane.activate() if @view.get('preview-plus.cursorFocusBack') or atom.config.get('preview-plus.cursorFocusBack')
   getUrl: (editor)->
