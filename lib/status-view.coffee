@@ -26,7 +26,7 @@ class CompilerView extends SelectListView
   confirmed: (item)->
     @statusView.updateCompileTo(item)
     if typeof item is 'string'
-      @cancel()
+      # @cancel()
       @remove()
 
 class BrowserView extends View
@@ -56,7 +56,7 @@ class BrowserView extends View
     ls = exec cmd
     li = $(evt.target).closest('li')
     if li.length > 0 and li.data('selectList')?
-      li.data('selectList').cancel()
+      # li.data('selectList').cancel()
       li.data('selectList').remove()
     return false
 
@@ -68,7 +68,6 @@ class StatusView extends View
       @span "▼", class:"enums",outlet:"enums", click:'compilesTo'
 
   initialize: (@model)->
-    debugger
     @statusBarTile = @model.statusBar.addRightTile {item:@, priority:9999}
     @clicks = 0
 
