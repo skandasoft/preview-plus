@@ -26,10 +26,14 @@ class CompilerView extends SelectListView
   confirmed: (item)->
     @statusView.updateCompileTo(item)
     if typeof item is 'string'
-      # @cancel()
-      @remove()
+      @cancel()
+
+  cancelled: ->
+    @remove()
 
 class BrowserView extends View
+  initialize: (@model)->
+    @browser = @model.config.browser[process.platform]
   @content: ->
     # @li click:'openBrowser', =>
       @span class: 'icon-browser-plus', click:'openBrowser', =>
@@ -39,21 +43,30 @@ class BrowserView extends View
         @span class:"icon-opera",click:'openOpera'
 
   openChrome: (evt)->
-    @open('chrome',evt)
-  openIE: (evt)->
-    @open('iexplore',evt)
-  openFirefox: (evt)->
-    @open('firefox',evt)
-  openOpera: (evt)->
-    @open('opera',evt)
-  openBrowser: (evt)->
-    @open('chrome',evt)
+    @open(@browser?.CHROME?.cmd,evt)
 
-  open: (browser,evt)->
+  openIE: (evt)->
+    @open(@browser?.IE?.cmd,evt)
+
+  openFirefox: (evt)->
+    @open(@browser?.FF?.cmd,evt)
+
+  openOpera: (evt)->
+    @open(@browser?.OPERA?.cmd,evt)
+
+  openBrowser: (evt)->
+    @open(@browser?.CHROME?.cmd,evt)
+
+  openSafari: (evt)->
+    @open(@browser?.SAFARI?.cmd,evt)
+
+  open: (cmd,evt)->
+    unless cmd
+      alert 'Please maintain browser commands for your OS in config'
+      return false
     editor = atom.workspace.getActiveEditor()
     fpath = editor.getPath()
-    cmd = "start #{browser} #{fpath}"
-    ls = exec cmd
+    ls = exec "#{cmd} #{fpath}"
     li = $(evt.target).closest('li')
     if li.length > 0 and li.data('selectList')?
       # li.data('selectList').cancel()
@@ -76,7 +89,7 @@ class StatusView extends View
     to =  @editor.get('preview-plus.compileTo')
     items = for item in @model.config[key]["enum"]
                if view = @model.config[key][item].view
-                 new @model.config[key][item].view
+                 new view(@model)
                else
                  item
     new CompilerView items,@,to
@@ -106,7 +119,7 @@ class StatusView extends View
       for item in @model.config[key]["enum"]
         if @model.config[key][item].view?
           compileToKey = item if @model.config[key][item].view is compileTo
-          compileToView = new @model.config[key][item].view
+          compileToView = new @model.config[key][item].view(@model)
     { compileToKey, compileToView }
 
   updateCompileTo: (compileTo)->

@@ -335,3 +335,30 @@ module.exports =
       ext: 'coffee'
       compile: 'cs'
       options: indent: "\t"
+
+  browser:
+    title: 'Browser'
+    type: 'boolean'
+    default: true
+    win32:
+      IE:
+        cmd: 'start iexplore '
+      CHROME:
+        cmd:  'start chrome '
+      FF:
+        cmd:  'start firefox '
+      OPERA:
+        cmd: 'start opera '
+      SAFARI:
+        cmd: 'start safari '
+    win64:
+      IE:
+        cmd: 'start iexplore '
+      CHROME:
+        cmd:  'start chrome '
+      FF:
+        cmd:  'start firefox '
+      OPERA:
+        cmd: 'start opera '
+      SAFARI:
+        cmd: 'start safari '
