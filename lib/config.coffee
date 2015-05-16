@@ -362,3 +362,12 @@ module.exports =
         cmd: 'start opera '
       SAFARI:
         cmd: 'start safari '
+    darwin:
+      CHROME:
+        cmd: 'open -a "Google Chrome" '
+      FF:
+        cmd: 'open -a "Firefox" '
+      SAFARI:
+        cmd: 'open -a "Safari" '
+      OPERA:
+        cmd: 'open -a "Opera" '

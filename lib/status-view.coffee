@@ -29,7 +29,7 @@ class CompilerView extends SelectListView
       @cancel()
 
   cancelled: ->
-    @remove()
+    @parent().remove()
 
 class BrowserView extends View
   initialize: (@model)->
