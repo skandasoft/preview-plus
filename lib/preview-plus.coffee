@@ -129,6 +129,7 @@ module.exports =
       @key = @getGrammar editor
 
       @toKey = @getCompileTo editor,@key
+      return unless typeof @toKey is 'string'
       to = @config[@key][@toKey]
       lang = require "./lang/#{@key}"
       data = @getContent('data',text)
