@@ -12,6 +12,6 @@ module.exports =
       renderer.render fileName,data
 
   htmlp: (filename,text,options={},data={})->
-        compiled = @html(filename,options,data)
+        compiled = @html(filename,text,options,data)
         console.log compiled
         return compiled

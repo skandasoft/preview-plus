@@ -410,3 +410,12 @@ module.exports =
         cmd: 'open -a "Safari" '
       OPERA:
         cmd: 'open -a "Opera" '
+    linux:
+      CHROME:
+        cmd: 'chrome '
+      FF:
+        cmd: 'firefox '
+      SAFARI:
+        cmd: 'safari '
+      OPERA:
+        cmd: 'opera '
