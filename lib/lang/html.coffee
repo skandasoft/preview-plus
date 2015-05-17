@@ -10,6 +10,11 @@ jQuery = require 'jquery'
 command = require './command'
 
 module.exports =
+    getContent: (tag,text)->
+        regex = new RegExp("<pp-#{tag}>([\\s\\S]*?)</pp-#{tag}>")
+        match = text.match(regex)
+        match[1].trim() if match? and match[1]?
+
     slim: (fpath,text,options=[])->
       command.compileFile(fpath,text,'html2slim',options)
     jade: (fpath,text,options={})->
@@ -50,6 +55,20 @@ module.exports =
 
     htmlp: (fpath,text)->
       if fpath then '' else text
+
+    htmlu: (fpath,text)->
+      fname = path.basename(fpath)
+      # get the <pp-url> under the cursor or the first one.
+      ed = atom.workspace.getActiveTextEditor()
+      return text if text = @getContent 'url',ed.lineTextForBufferRow ed.getCursorScreenPosition().row
+      return text if text = @getContent 'url',ed.getText()
+
+      cproject = atom.project.get('preview-plus.cproject')
+      if cproject?.base?
+        fname = fpath.replace(cproject.base,'')
+        return "#{cproject.url}#{fname}" if cproject.url?
+
+      "http://127.0.0.1/#{fname}"
 
     # jsx: (text,options={})->
     #     window.IN_BROWSER = true

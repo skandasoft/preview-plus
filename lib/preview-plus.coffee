@@ -185,14 +185,18 @@ module.exports =
     return atom.confirm 'Cannot Preview' unless to
     ext = if err then "#{to.ext}.err" else to.ext
     # title = "preview-plus://#{path.dirname(editor.getPath())}/preview~#{editor.getTitle()}.#{ext}"
-    if text
-      if @toKey is 'htmlp'
+    if @toKey is 'htmlp'
+      if text
         title = "browser-plus:///#{(editor.getPath() or editor.getTitle()).replace(/\\/g,"/")}.htmlp"
       else
-        title = "preview~#{editor.getTitle()}.#{ext}"
+        fpath = fpath.replace(/\\/g,"/")
+        title = "file:///#{fpath}"
+    else if @toKey is 'htmlu'
+      return unless text
+      title = text
+      text = null
     else
-      fpath = fpath.replace(/\\/g,"/")
-      title = "file:///#{fpath}"
+      title = "preview~#{editor.getTitle()}.#{ext}"
     grammar = if to and not err then to.ext  else syntax = editor.getGrammar()
     syntax ?= atom.grammars.selectGrammar(grammar)
     if not err and editor.getSelectedText() and @toKey isnt 'htmlp'

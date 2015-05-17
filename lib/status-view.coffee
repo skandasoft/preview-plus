@@ -70,7 +70,7 @@ class BrowserView extends View
     li = $(evt.target).closest('li')
     if li.length > 0 and li.data('selectList')?
       # li.data('selectList').cancel()
-      li.data('selectList').remove()
+      li.data('selectList').parent().remove()
     return false
 
 class StatusView extends View

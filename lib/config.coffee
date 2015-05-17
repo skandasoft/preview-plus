@@ -18,7 +18,10 @@ module.exports =
     title: 'HTML Preview'
     type: 'boolean'
     default: false
-
+  htmlu:
+    default: false
+    type: 'boolean'
+    title: 'HTML URL'
   webview:
     title: 'WebView'
     type: 'boolean'
@@ -30,7 +33,7 @@ module.exports =
     # description: 'CoffeeScript 2'
     type: 'string'
     default: 'JavaScript'
-    enum: ['JavaScript','HTML','htmlp']
+    enum: ['JavaScript','HTML','htmlu','htmlp']
     alias: ['CoffeeScript (Literate)']
     fileTypes: ['coff']
     JavaScript:
@@ -43,6 +46,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   javascript:
     name: 'JavaScript'
@@ -61,6 +67,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   ect:
     name: 'ECT'
@@ -69,7 +78,7 @@ module.exports =
     fileTypes: ['ect']
     filePath: true
     default: 'HTML'
-    enum: ['HTML','htmlp']
+    enum: ['HTML','htmlu','htmlp']
     HTML:
       ext:'html'
       compile:'html'
@@ -83,6 +92,9 @@ module.exports =
       options:
         open: '{{'
         close: '}}'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   jade:
     name: 'Jade'
@@ -98,6 +110,9 @@ module.exports =
     htmlp:
       compile:'htmlp'
       ext:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   slim:
     name: 'Ruby Slim'
@@ -105,7 +120,7 @@ module.exports =
     # description: 'Slim 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp','erb']
+    enum: ['HTML','htmlu','htmlp','erb']
     HTML:
       ext:'html'
       compile: 'html'
@@ -117,6 +132,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile: 'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   markdown:
     name: 'GitHub Markdown'
@@ -125,13 +143,16 @@ module.exports =
     type: 'string'
     cssURL: 'http://jasonm23.github.io/markdown-css-themes/markdown1.css'
     default: 'HTML'
-    enum: ['HTML','htmlp']
+    enum: ['HTML','htmlu','htmlp']
     HTML:
       ext:'html'
       compile: 'html'
     htmlp:
       ext:'htmlp'
       compile: 'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   typescript:
     name: 'TypeScript'
@@ -150,7 +171,7 @@ module.exports =
     title: 'JSX 2'
     type: 'string'
     default: 'JavaScript'
-    enum: ['JavaScript','HTML','htmlp']
+    enum: ['JavaScript','HTML','htmlu','htmlp']
     JavaScript:
       ext:'js'
       compile:'js'
@@ -161,6 +182,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
     resources:
       csss:[]
       scripts:['react.js']
@@ -170,7 +194,7 @@ module.exports =
     title: 'ERB 2'
     type: 'string'
     default: 'HAML'
-    enum: ['HAML','htmlp']
+    enum: ['HAML','htmlu','htmlp']
     fileTypes:['erb']
     HAML:
       ext:'haml'
@@ -179,6 +203,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   haml:
     name: 'HAML'
@@ -186,13 +213,16 @@ module.exports =
     title: 'HAML 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp']
+    enum: ['HTML','htmlu','htmlp']
     HTML:
       ext:'html'
       compile:'html'
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   html:
     name:'HTML'
@@ -200,7 +230,7 @@ module.exports =
     type: 'string'
     default: 'htmlp'
     # enum: ['htmlp','Jade','Ruby Slim','GitHub Markdown','JSX','HAML']
-    enum: ['htmlp','Jade','Ruby Slim','HAML','browser']
+    enum: ['htmlp','htmlu','Jade','Ruby Slim','HAML','browser']
     Jade:
       ext: 'jade'
       compile:'jade'
@@ -211,6 +241,9 @@ module.exports =
     htmlp:
       ext: 'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
     'GitHub Markdown':
       ext: 'md'
       compile:'md'
@@ -300,7 +333,7 @@ module.exports =
     title: 'Handlebars 2'
     type: 'string'
     default: 'HTML'
-    enum: ['HTML','htmlp']
+    enum: ['HTML','htmlu','htmlp']
     alias: ['HTML (Mustache)']
     fileTypes: ['handlebars']
     HTML:
@@ -309,13 +342,16 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
 
   cjsx:
     name: 'CoffeeScript (JSX)'
     title: 'CJSX 2'
     type: 'string'
     default: 'HTML'
-    enum: ['JavaScript','HTML','htmlp','CoffeeScript']
+    enum: ['JavaScript','HTML','htmlp','htmlu','CoffeeScript']
     scripts:['https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js']
     resources:
       csss:[]
@@ -326,6 +362,9 @@ module.exports =
     htmlp:
       ext:'htmlp'
       compile:'htmlp'
+    htmlu:
+      ext:'htmlu'
+      compile:'htmlu'
     JavaScript:
       ext:'js'
       compile:'js'
