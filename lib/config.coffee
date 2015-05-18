@@ -76,6 +76,7 @@ module.exports =
     title: 'ECT 2'
     type: 'string'
     fileTypes: ['ect']
+    alias: ['ECT <<','ECT {{','ECT <%','ECT <?']
     filePath: true
     default: 'HTML'
     enum: ['HTML','htmlu','htmlp']
@@ -85,6 +86,9 @@ module.exports =
       options:
         open: '{{'
         close: '}}'
+      # options:
+      #   open: '<%'
+      #   close: '%>'
 
     htmlp:
       compile:'htmlp'
@@ -92,6 +96,9 @@ module.exports =
       options:
         open: '{{'
         close: '}}'
+      # options:
+      #   open: '<%'
+      #   close: '%>'
     htmlu:
       ext:'htmlu'
       compile:'htmlu'
