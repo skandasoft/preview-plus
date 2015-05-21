@@ -17,7 +17,7 @@ module.exports =
 
   toggleHTML: ->
       atom.config.set 'preview-plus.htmlp', !atom.config.get 'preview-plus.htmlp'
-      if editor = atom.workspace.getActiveEditor()
+      if editor = atom.workspace.getActiveTextEditor()
         key = @getGrammar editor
         if atom.config.get('preview-plus.htmlp')
           @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key]["enum"]
@@ -70,7 +70,7 @@ module.exports =
       for editor in editors
         if editor.get('preview-plus.livePreview')?
           editor.set('preview-plus.livePreview',obj.newValue)
-      if atom.workspace.getActiveEditor()
+      if atom.workspace.getActiveTextEditor()
         if obj.newValue
           @previewStatus.live.removeClass 'off'
           @toggle()

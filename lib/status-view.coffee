@@ -64,7 +64,7 @@ class BrowserView extends View
     unless cmd
       alert 'Please maintain browser commands for your OS in config'
       return false
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
     fpath = editor.getPath()
     ls = exec "#{cmd} #{fpath}"
     li = $(evt.target).closest('li')
