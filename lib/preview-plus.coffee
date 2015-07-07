@@ -237,7 +237,7 @@ module.exports =
                     uri = @view.getURI()
                     if path.extname(title) is '.err'
                       uri = uri.replace '.err',''
-                      errView = compiledPane.itemForUri uri
+                      errView = compiledPane.itemForURI uri
                     else
                       errView = compiledPane.itemForURI "#{uri}.err"
                     errView.destroy() if errView
