@@ -57,8 +57,9 @@ module.exports =
       return unless activePane
       @previewStatus?.setCompilesTo activePane
       subscribe?.dispose?()
-      subscribe = activePane.onDidChangeGrammar?  ->
-        activePane.set('preview-plus.compileTo')
+      subscribe = activePane.onDidChangeGrammar?  (grammar)->
+        # activePane.set('preview-plus.compileTo')
+        # activePane['preview-plus.compileTo'] = grammar.scopeName
         _this.previewStatus?.setCompilesTo activePane
 
     atom.config.onDidChange 'preview-plus.livePreview', (obj)=>
