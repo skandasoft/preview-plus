@@ -6,7 +6,8 @@ module.exports =
 class HTMLBase extends View
 
   @content: ->
-    project = atom.project.get 'preview-plus.cproject'
+    # project = atom.project.get 'preview-plus.cproject'
+    project = @cproject
     project.watch ?= ''
     @div class:'preview-plus-base', =>
       @div class:'base',outlet:'base', =>
@@ -47,19 +48,19 @@ class HTMLBase extends View
 
 
   onConfirm: ->
-    cproject = atom.project.get('preview-plus.cproject')
-    cproject.htmlu = @find('#htmlu').prop('checked')
-    cproject.url = @find('#url').val()
-    cproject.base = @find('#href').val()
-    cproject.watch = @find('#watch').val()
-    atom.project.set('preview-plus.cproject',cproject)
-    project = atom.project.get('preview-plus.project')
-    for key,val of cproject
-      project[key] = val
-    atom.project.set('preview-plus.project',project)
+    # cproject = atom.project.get('preview-plus.cproject')
+    @cproject.htmlu = @find('#htmlu').prop('checked')
+    @cproject.url = @find('#url').val()
+    @cproject.base = @find('#href').val()
+    @cproject.watch = @find('#watch').val()
+    # atom.project.set('preview-plus.cproject',cproject)
+    #project = atom.project.get('preview-plus.project')
+    for key,val of @cproject
+      @project[key] = val
+    # atom.project.set('preview-plus.project',project)
     @model.previewStatus?.setCompilesTo atom.workspace.getActivePaneItem()
     @model.watcher.chokidar?.unwatch?(paths) if paths = @model.watcher?.paths
     @model.watcher?.chokidar?.close()
-    @model.watcher = new Watch(w) if w = cproject.watch
+    @model.watcher = new Watch(w) if w = @cproject.watch
     @model.toggle()
     @close()

@@ -86,7 +86,8 @@ class StatusView extends View
 
   compilesTo: ->
     key = @model.getGrammar(@editor)
-    to =  @editor.get('preview-plus.compileTo')
+    # to =  @editor.get('preview-plus.compileTo')
+    to =  @editor['preview-plus.compileTo']
     items = for item in @model.config[key]["enum"]
                if view = @model.config[key][item].view
                  new view(@model)
@@ -103,10 +104,11 @@ class StatusView extends View
         @model.toggle()
       ,300
     else
-      if @editor.get('preview-plus.htmlp')?
+      # if @editor.get('preview-plus.htmlp')?
+      if @editor['preview-plus.htmlp']?
         clearTimeout timer
-        cproject = atom.project.get('preview-plus.cproject')
-        @updateCompileTo if cproject.htmlu then 'htmlu' else 'htmlp'
+        # cproject = atom.project.get('preview-plus.cproject')
+        @updateCompileTo if @cproject.htmlu then 'htmlu' else 'htmlp'
         @clicks = 0
   getCompileTo: (compileTo)->
     compileToKey = compileTo
@@ -125,10 +127,13 @@ class StatusView extends View
   updateCompileTo: (compileTo)->
     {compileToKey,compileToView} = @getCompileTo(compileTo)
     if compileToKey is 'htmlp'
-      @editor.set('preview-plus.htmlp',true)
+      # @editor.set('preview-plus.htmlp',true)
+      @editor['preview-plus.htmlp'] = true
     else
-      @editor.set('preview-plus.htmlp',false) if @editor.get('preview-plus.htmlp')?
-    @editor.set('preview-plus.compileTo',compileToKey)
+      # @editor.set('preview-plus.htmlp',false) if @editor.get('preview-plus.htmlp')?
+      @editor['preview-plus.htmlp'] = false  if @editor['preview-plus.htmlp']?
+    @editor['preview-plus.compileTo'] = compileToKey
+    # @editor.set('preview-plus.compileTo',compileToKey)
     if compileToView
       @compileTo.empty().append compileToView
     else
@@ -139,11 +144,14 @@ class StatusView extends View
     super
 
   toggleLive: ->
-    live = @editor.get 'preview-plus.livePreview'
+    # live = @editor.get 'preview-plus.livePreview'
+    live = @editor['preview-plus.livePreview']
     @live.toggleClass 'off'
-    @editor.set 'preview-plus.livePreview', !live
+    # @editor.set 'preview-plus.livePreview', !live
+    @editor['preview-plus.livePreview'] = !live
     if live
-      liveSubscription = @editor.get 'preview-plus.livePreview-subscription'
+      # liveSubscription = @editor.get 'preview-plus.livePreview-subscription'
+      liveSubscription = @editor['preview-plus.livePreview-subscription']
       if liveSubscription
         idx = @model.liveEditors.indexOf @editor
         @model.liveEditors.splice(idx,1) if idx > -1
@@ -151,8 +159,10 @@ class StatusView extends View
     else
       @model.toggle()
   setLive: ->
-    live = @editor.get('preview-plus.livePreview') ?  atom.config.get('preview-plus.livePreview')
-    @editor.set('preview-plus.livePreview', live)
+    # live = @editor.get('preview-plus.livePreview') ?  atom.config.get('preview-plus.livePreview')
+    live = @editor['preview-plus.livePreview'] ?  atom.config.get('preview-plus.livePreview')
+    # @editor.set('preview-plus.livePreview', live)
+    @editor['preview-plus.livePreview'] = live
     @live.toggleClass 'off',!live
     @live.toggleClass 'on',atom.config.get('preview-plus.livePreview')
 
@@ -160,35 +170,47 @@ class StatusView extends View
     try
       @show()
       key = @model.getGrammar(@editor)
-      unless @editor.get('preview-plus.compileTo')
+      # unless @editor.get('preview-plus.compileTo')
+      unless @editor['preview-plus.compileTo']
         toKey = @model.getCompileTo(@editor,key)
-        @editor.set('preview-plus.compileTo',toKey)
+        # @editor.set('preview-plus.compileTo',toKey)
+        @editor['preview-plus.compileTo'] = toKey
         if @model.config[key].cursorFocusBack
-          @editor.set('preview-plus.cursorFocusBack',@model.config[key].cursorFocusBack)
+          @editor['preview-plus.cursorFocusBack'] = @model.config[key].cursorFocusBack
+          # @editor.set('preview-plus.cursorFocusBack',@model.config[key].cursorFocusBack)
         if @model.config[key][toKey].cursorFocusBack
-          @editor.set('preview-plus.cursorFocusBack',@model.config[key][toKey].cursorFocusBack)
-        @editor.set('preview-plus.enum',true) if @model.config[key]["enum"]?.length > 1
+          # @editor.set('preview-plus.cursorFocusBack',@model.config[key][toKey].cursorFocusBack)
+          @editor['preview-plus.cursorFocusBack'] =  @model.config[key][toKey].cursorFocusBack
+        # @editor.set('preview-plus.enum',true) if @model.config[key]["enum"]?.length > 1
+        @editor['preview-plus.enum']  = true if @model.config[key]["enum"]?.length > 1
         # if @editor.set('preview-plus.htmlp',htmlp) and 'htmlp' in @model.config[key].enums
-        if (not @editor.get('preview-plus.htmlp')? ) and
+        # if (not @editor.get('preview-plus.htmlp')? ) and
+        if (not @editor['preview-plus.htmlp']? ) and
            ('htmlp' in @model.config[key]["enum"] or 'htmlu' in @model.config[key]["enum"])
-          @editor.set 'preview-plus.htmlp',atom.config.get('preview-plus.htmlp')
+          # @editor.set 'preview-plus.htmlp',atom.config.get('preview-plus.htmlp')
+          @editor['preview-plus.htmlp'] = atom.config.get('preview-plus.htmlp')
 
-      compileToView = compileTo = @editor.get('preview-plus.compileTo')
-      if  @editor.get('preview-plus.htmlp')
-         compileToKey = compileTo = if 'htmlu' in @model.config[key]["enum"] and atom.project.get('preview-plus.cproject')?.htmlu
+      # compileToView = compileTo = @editor.get('preview-plus.compileTo')
+      compileToView = compileTo = @editor['preview-plus.compileTo']
+      # if  @editor.get('preview-plus.htmlp')
+      if  @editor['preview-plus.htmlp']
+        #  compileToKey = compileTo = if 'htmlu' in @model.config[key]["enum"] and atom.project.get('preview-plus.cproject')?.htmlu
+         compileToKey = compileTo = if 'htmlu' in @model.config[key]["enum"] and @cproject?.htmlu
                        'htmlu'
                      else
                        'htmlp'
       else
         {compileToKey,compileToView} = @getCompileTo compileTo
-      @editor.set 'preview-plus.compileTo', compileToKey
+      # @editor.set 'preview-plus.compileTo', compileToKey
+      @editor['preview-plus.compileTo'] = compileToKey
       if compileToView
         @compileTo.empty().append compileToView
       else
         @compileTo.empty().text compileToKey
 
       @compileTo.toggleClass 'htmlp',atom.config.get('preview-plus.htmlp') #and @compileTo.text() is 'htmlp'
-      @enums.show() if @editor.get('preview-plus.enum')
+      # @enums.show() if @editor.get('preview-plus.enum')
+      @enums.show() if @editor['preview-plus.enum']
       @setLive()
     catch e
       @hide()

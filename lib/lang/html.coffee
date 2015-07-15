@@ -63,10 +63,10 @@ module.exports =
       return text if text = @getContent 'url',ed.lineTextForBufferRow ed.getCursorScreenPosition().row
       return text if text = @getContent 'url',ed.getText()
 
-      cproject = atom.project.get('preview-plus.cproject')
-      if cproject?.base?
-        fname = fpath.replace(cproject.base,'')
-        return "#{cproject.url}#{fname}" if cproject.url?
+      # cproject = atom.project.get('preview-plus.cproject')
+      if @cproject?.base?
+        fname = fpath.replace(@cproject.base,'')
+        return "#{@cproject.url}#{fname}" if @cproject.url?
 
       "http://127.0.0.1/#{fname}"
 

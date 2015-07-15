@@ -25,19 +25,20 @@ module.exports =
           @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
 
   showConfig: ->
-    srcdir = atom.project.get('preview-plus.srcdir')
-    fileName = "#{srcdir}/config.coffee"
+    # srcdir = atom.project.get('preview-plus.srcdir')
+    fileName = "#{__dirname}/config.coffee"
     atom.workspace.open fileName, searchAllPanes:true
 
   updateProject: ->
-    project = @state?.projectState or {}
+    @project = @state?.projectState or {}
     projectPath = atom.project.getPaths()[0]
-    cproject = project[projectPath] ?= {}
-    cproject.base ?= projectPath
-    cproject.url ?= 'http://localhost'
-    atom.project.set 'preview-plus.project',project
-    atom.project.set 'preview-plus.cproject',cproject
-    atom.project.set 'preview-plus.srcdir', __dirname
+    @cproject = @project[projectPath] ?= {}
+    @cproject.base ?= projectPath
+    @cproject.url ?= 'http://localhost'
+    @srcdir = __dirname
+    # atom.project.set 'preview-plus.project',project
+    # atom.project.set 'preview-plus.cproject',cproject
+    # atom.project.set 'preview-plus.srcdir', __dirname
 
 
   consumeStatusBar: (statusBar)->
@@ -48,7 +49,7 @@ module.exports =
     @previewStatus.setCompilesTo activePane
 
   activate: (@state) ->
-    atom.project.set 'preview-plus.srcdir', __dirname
+    # atom.project.set 'preview-plus.srcdir', __dirname
     @updateProject()
     atom.project.onDidChangePaths @updateProject
 
@@ -68,8 +69,11 @@ module.exports =
         @liveEditors = []
       editors = atom.workspace.getEditors()
       for editor in editors
-        if editor.get('preview-plus.livePreview')?
-          editor.set('preview-plus.livePreview',obj.newValue)
+        # if editor.get('preview-plus.livePreview')?
+        #   editor.set('preview-plus.livePreview',obj.newValue)
+
+        if editor['preview-plus.livePreview']?
+          editor['preview-plus.livePreview'] = obj.newValue
       if atom.workspace.getActiveTextEditor()
         if obj.newValue
           @previewStatus.live.removeClass 'off'
@@ -119,11 +123,13 @@ module.exports =
       {text,fpath} = @getText editor
       cfgs = atom.config.get('preview-plus')
 
-      if editor.get('preview-plus.livePreview') and not (editor in @liveEditors)
+      # if editor.get('preview-plus.livePreview') and not (editor in @liveEditors)
+      if editor['preview-plus.livePreview'] and not (editor in @liveEditors)
         @liveEditors.push editor
         editor.buffer.stoppedChangingDelay = cfgs['liveMilliseconds']
         liveSubscription = editor.onDidStopChanging @listen
-        editor.set('preview-plus.livePreview-subscription',liveSubscription)
+        # editor.set('preview-plus.livePreview-subscription',liveSubscription)
+        editor['preview-plus.livePreview-subscription'] = liveSubscription
         @subscriptions.add liveSubscription
 
       @key = @getGrammar editor
@@ -215,12 +221,14 @@ module.exports =
                       @view.save = ->
                       @view.pp = {}
                       @view.pp.orgURI = editor.getURI()
-                      cproject = atom.project.get('preview-plus.cproject')
-                      @watcher = new Watch(cproject.watch) if cproject.watch and not @watcher
-                      @view.addSubscription editor.onDidDestroy =>
+                      # cproject = atom.project.get('preview-plus.cproject')
+                      @watcher = new Watch(@cproject.watch) if @cproject.watch and not @watcher
+                      # @view.addSubscription editor.onDidDestroy =>
+                      @view.disposables.add editor.onDidDestroy =>
                         @view.destroy()
                       if @watcher
-                        subscription = @view.addSubscription @watcher.onDidChange =>
+                        # subscription = @view.addSubscription @watcher.onDidChange =>
+                        subscription = @view.disposables.add @watcher.onDidChange =>
                           @toggle {filePath:@view.pp.orgURI}
                       @views.push @view
                     if @key is 'html' and not text
@@ -246,8 +254,8 @@ module.exports =
       #get text under cursor
       text = editor.lineForScreenRow(editor.getCursor().getScreenRow()).text
       url = @getTextTag('pp-url',text) or @getTextTag('pp-url',editor.getText()) or path.basename editor.getPath()
-      "#{atom.project.get('preview-plus.cproject').url}/#{url}"
-
+      # "#{atom.project.get('preview-plus.cproject').url}/#{url}"
+      "#{@cproject.url}/#{url}"
   getTextTag: (tag,text)->
       regex = new RegExp("<#{tag}>([\\s\\S]*?)</#{tag}>")
       match = text.match(regex)
@@ -262,11 +270,15 @@ module.exports =
       viewState.push if view.serialize?()
     previewState: @previewStatus.serialize()
     viewState : viewState
-    projectState: atom.project.get('preview-plus.project')
+    projectState: @project
+    # projectState: atom.project.get('preview-plus.project')
 
   listen: ->
-      view = atom.workspaceView.getActiveView()
-      atom.commands.dispatch(view[0],'preview-plus:preview')
+      # view = atom.workspaceView.getActiveView()
+      textEditor = atom.workspace.getActiveTextEditor()
+      if textEditor
+        view = atom.views.getView(textEditor)
+        atom.commands.dispatch(view,'preview-plus:preview') if view
 
   getGrammar: (editor)->
     grammar = editor.getGrammar?()
@@ -305,13 +317,16 @@ module.exports =
 
 
   getCompileTo: (editor,key)->
-    unless toKey = editor.get('preview-plus.compileTo')
+    # unless toKey = editor.get('preview-plus.compileTo')
+    unless toKey = editor['preview-plus.compileTo']
       toKey = atom.config.get("preview-plus.#{key}")
-      editor.set 'preview-plus.compileTo',toKey
+      # editor.set 'preview-plus.compileTo',toKey
+      editor['preview-plus.compileTo'] = toKey
     toKey or throw new PPError 'alert', 'Cannot Preview'
 
   getText: (editor)->
     selected = editor.getSelectedText()
-    fpath = editor.getPath() unless ( selected or editor.get('preview-plus.livePreview'))
+    # fpath = editor.getPath() unless ( selected or editor.get('preview-plus.livePreview'))
+    fpath = editor.getPath() unless ( selected or editor['preview-plus.livePreview'] )
     text = selected or editor.getText()
     if text.length is 0 or !text.trim() then throw new PPError 'alert','No Code to Compile' else { text, fpath}
