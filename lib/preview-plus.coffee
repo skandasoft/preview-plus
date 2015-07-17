@@ -95,7 +95,7 @@ module.exports =
     itemSets = atom.contextMenu.itemSets
     contextMenu = _.find itemSets, (item,itemIdx)->
                     idx = itemIdx
-                    item.items[0].command is 'preview-plus:preview'
+                    item.items[0]?.command is 'preview-plus:preview'
 
     if contextMenu?
       itemSets.splice idx,1
