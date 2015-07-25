@@ -68,7 +68,7 @@ module.exports =
         @subscriptions.dispose()
         @subscriptions = new CompositeDisposable()
         @liveEditors = []
-      editors = atom.workspace.getEditors()
+      editors = atom.workspace.getTextEditors()
       for editor in editors
         # if editor.get('preview-plus.livePreview')?
         #   editor.set('preview-plus.livePreview',obj.newValue)
