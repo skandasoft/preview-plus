@@ -108,7 +108,7 @@ class StatusView extends View
       if @editor['preview-plus.htmlp']?
         clearTimeout timer
         # cproject = atom.project.get('preview-plus.cproject')
-        @updateCompileTo if @cproject.htmlu then 'htmlu' else 'htmlp'
+        @updateCompileTo if @cproject?.htmlu then 'htmlu' else 'htmlp'
         @clicks = 0
   getCompileTo: (compileTo)->
     compileToKey = compileTo
