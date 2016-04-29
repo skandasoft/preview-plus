@@ -16,13 +16,13 @@ module.exports =
     @previewStatus.live.toggleClass 'on'
 
   toggleHTML: ->
-      atom.config.set 'preview-plus.htmlp', !atom.config.get 'preview-plus.htmlp'
-      if editor = atom.workspace.getActiveTextEditor()
-        key = @getGrammar editor
-        if atom.config.get('preview-plus.htmlp')
-          @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key]["enum"]
-        else
-          @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
+    atom.config.set 'preview-plus.htmlp', !atom.config.get 'preview-plus.htmlp'
+    if editor = atom.workspace.getActiveTextEditor()
+      key = @getGrammar editor
+      if atom.config.get('preview-plus.htmlp')
+        @previewStatus.updateCompileTo('htmlp') if 'htmlp' in @config[key]["enum"]
+      else
+        @previewStatus.updateCompileTo atom.config.get "preview-plus.#{key}"
 
   showConfig: ->
     # srcdir = atom.project.get('preview-plus.srcdir')
@@ -93,7 +93,7 @@ module.exports =
     @subscriptions = new CompositeDisposable()
     idx = null
     itemSets = atom.contextMenu.itemSets
-    contextMenu = _.find itemSets, (item,itemIdx)->
+    contextMenu = _.find itemSets, (item,itemIdx) ->
                     idx = itemIdx
                     item.items[0]?.command is 'preview-plus:preview'
 
@@ -179,11 +179,11 @@ module.exports =
         @preview editor,fpath,error,true
 
   getContent: (tag,text)->
-      regex = new RegExp("<pp-#{tag}>([\\s\\S]*?)</pp-#{tag}>")
-      match = text.match(regex)
-      if match? and match[1].trim()
-        data = loophole.allowUnsafeEval ->
-            eval "(#{match[1]})"
+    regex = new RegExp("<pp-#{tag}>([\\s\\S]*?)</pp-#{tag}>")
+    match = text.match(regex)
+    if match? and match[1].trim()
+      data = loophole.allowUnsafeEval ->
+        eval "(#{match[1]})"
 
   preview: (editor,fpath,text,err=false)->
     activePane = atom.workspace.paneForItem(editor)

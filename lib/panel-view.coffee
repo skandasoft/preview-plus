@@ -35,29 +35,29 @@ class PanelView extends ScrollView
     @editor
 
   dragStart: (evt,ele)->
+    view = @view()
+    editorHeight = view.find('atom-text-editor').height()
+    top = view.parent().position().top
+    ht = view.height()
+    width = view.width()
+    view.css position :'fixed'
+    view.css top: evt.pageY
+    view.css width: width
+    view.css 'max-height', ''
+    view.css height: ht
+    $(document).mousemove (evt,ele)=>
       view = @view()
-      editorHeight = view.find('atom-text-editor').height()
-      top = view.parent().position().top
-      ht = view.height()
-      width = view.width()
-      view.css position :'fixed'
       view.css top: evt.pageY
-      view.css width: width
-      view.css 'max-height', ''
-      view.css height: ht
-      $(document).mousemove (evt,ele)=>
-        view = @view()
-        view.css top: evt.pageY
-        height = ht +  top - evt.pageY
-        height = height * -1 if height < 0
-        textEditorHeight = editorHeight +  top - evt.pageY
-        textEditorHeight = textEditorHeight * -1 if textEditorHeight < 0
-        view.find('atom-text-editor').css height: textEditorHeight
-        view.css height: height
-      $(document).mouseup (evt,ele)=>
-        view = @view().view()
-        view.css position :'static'
-        $(document).unbind('mousemove')
+      height = ht +  top - evt.pageY
+      height = height * -1 if height < 0
+      textEditorHeight = editorHeight +  top - evt.pageY
+      textEditorHeight = textEditorHeight * -1 if textEditorHeight < 0
+      view.find('atom-text-editor').css height: textEditorHeight
+      view.css height: height
+    $(document).mouseup (evt,ele)=>
+      view = @view().view()
+      view.css position :'static'
+      $(document).unbind('mousemove')
 
   attach: ->
     $(document).keyup (e)=>
