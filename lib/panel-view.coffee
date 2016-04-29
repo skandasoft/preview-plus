@@ -1,10 +1,10 @@
-{TextEditor}  = require 'atom'
+buildTextEditor = require './build-text-editor'
 {$, ScrollView} = require 'atom-space-pen-views'
 
 module.exports =
 class PanelView extends ScrollView
   constructor: (@title,@src,@grammar)->
-    @editor = new TextEditor mini:false
+    @editor = buildTextEditor mini:false
     @attach()
     super
 
