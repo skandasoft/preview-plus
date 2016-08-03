@@ -1,6 +1,6 @@
-# preview-plus package Preview Anything to Anything
+# preview-plus package Preview Anything to Anything -- Deprecated - check out https://github.com/skandasoft/pp
 ----------------------------------------------------
-MOVING THE DEVELOPMENT TO PP(npm install pp) check out https://github.com/skandasoft/pp
+MOVING THE DEVELOPMENT TO PP(npm install pp)check out https://github.com/skandasoft/pp
 INSTALL  BROWSER-PLUS --> apm install browser-plus or check out in the packages
 
 One Utility to handle the following matrix of previews
