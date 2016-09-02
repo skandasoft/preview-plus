@@ -250,7 +250,7 @@ module.exports =
                     else
                       errView = compiledPane.itemForURI "#{uri}.err"
                     errView.destroy() if errView
-                    activePane.activate() if @view.get('preview-plus.cursorFocusBack') or atom.config.get('preview-plus.cursorFocusBack')
+                    activePane.activate() if atom.config.get('preview-plus.cursorFocusBack')
   getUrl: (editor)->
       #get text under cursor
       text = editor.lineForScreenRow(editor.getCursor().getScreenRow()).text
